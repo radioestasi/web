@@ -1,431 +1,418 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Radio Estasi - La radio del futuro</title>
-    <link rel="icon" type="image/jpeg" href="favicon.jpg">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #ffcc00;
-            --bg: #0a0a0a;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --text: #ffffff;
-            --danger: #ff0000;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Estasi - La radio del futuro</title>
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ffcc00;
+            --bg: #0a0a0a;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text: #ffffff;
+            --danger: #ff0000;
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
 
-        header {
-            background: rgba(0,0,0,0.95);
-            padding: 15px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid var(--primary);
-        }
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .logo-text {
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 1.8rem;
-            font-weight: 800;
-            text-shadow: 0 0 10px rgba(255,204,0,0.3);
-            cursor: pointer;
-        }
-        nav { display: flex; gap: 25px; justify-content: center; margin: 15px 0; }
-        .nav-item { position: relative; cursor: pointer; color: var(--text); font-weight: 600; font-size: 0.95rem; transition: 0.3s; }
-        .nav-item:hover { color: var(--primary); }
-        
-        .dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #111;
-            border: 1px solid var(--primary);
-            min-width: 180px;
-            z-index: 10;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        }
-        .nav-item:hover .dropdown { display: block; }
-        .dropdown div { padding: 12px; border-bottom: 1px solid #222; font-size: 0.85rem; color: #fff; }
-        .dropdown div:hover { background: var(--primary); color: #000; }
+        header {
+            background: rgba(0,0,0,0.95);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary);
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .logo-text {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(255,204,0,0.3);
+            cursor: pointer;
+        }
+        nav { display: flex; gap: 25px; justify-content: center; margin: 15px 0; }
+        .nav-item { position: relative; cursor: pointer; color: var(--text); font-weight: 600; font-size: 0.95rem; transition: 0.3s; }
+        .nav-item:hover { color: var(--primary); }
+        
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            border: 1px solid var(--primary);
+            min-width: 180px;
+            z-index: 10;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .nav-item:hover .dropdown { display: block; }
+        .dropdown div { padding: 12px; border-bottom: 1px solid #222; font-size: 0.85rem; color: #fff; }
+        .dropdown div:hover { background: var(--primary); color: #000; }
 
-        .player-bar {
-            max-width: 1200px;
-            margin: 5px auto 0;
-            background: linear-gradient(90deg, #151515, #000);
-            border-radius: 50px;
-            padding: 10px 25px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid rgba(255,204,0,0.2);
-        }
-        .play-controls { display: flex; align-items: center; gap: 15px; }
-        .play-btn {
-            background: var(--primary);
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-        }
-        .play-btn:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--primary); }
+        .player-bar {
+            max-width: 1200px;
+            margin: 5px auto 0;
+            background: linear-gradient(90deg, #151515, #000);
+            border-radius: 50px;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid rgba(255,204,0,0.2);
+        }
+        .play-controls { display: flex; align-items: center; gap: 15px; }
+        .play-btn {
+            background: var(--primary);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .play-btn:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--primary); }
 
-        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; min-height: 70vh; }
-        .section-flex { display: flex; align-items: center; gap: 40px; margin-bottom: 80px; }
-        .hero-text { flex: 1; }
-        .hero-img { width: 350px; height: 350px; border-radius: 20px; object-fit: cover; box-shadow: 0 0 30px rgba(255,204,0,0.2); }
-        
-        .btn {
-            background: var(--primary);
-            color: #000;
-            padding: 12px 28px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 800;
-            display: inline-block;
-            margin-top: 15px;
-            transition: 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255,204,0,0.4); }
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; min-height: 70vh; }
+        .section-flex { display: flex; align-items: center; gap: 40px; margin-bottom: 80px; }
+        .hero-text { flex: 1; }
+        .hero-img { width: 350px; height: 350px; border-radius: 20px; object-fit: cover; box-shadow: 0 0 30px rgba(255,204,0,0.2); }
+        
+        .btn {
+            background: var(--primary);
+            color: #000;
+            padding: 12px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 800;
+            display: inline-block;
+            margin-top: 15px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255,204,0,0.4); }
 
-        .on-air-badge {
-            background: var(--danger);
-            color: white;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-weight: 900;
-            font-size: 0.7rem;
-            margin-right: 12px;
-            animation: blink 1.5s infinite;
-        }
-        @keyframes blink { 0% {opacity: 1} 50% {opacity: 0.5} 100% {opacity: 1} }
+        .on-air-badge {
+            background: var(--danger);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-weight: 900;
+            font-size: 0.7rem;
+            margin-right: 12px;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 0% {opacity: 1} 50% {opacity: 0.5} 100% {opacity: 1} }
 
-        .prog-item { display: flex; align-items: center; gap: 20px; background: var(--card-bg); padding: 20px; margin-bottom: 15px; border-radius: 15px; border-left: 5px solid transparent; }
-        .prog-item.active-now { border-left: 5px solid var(--danger); background: rgba(255,0,0,0.05); }
-        .prog-img-circle { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); flex-shrink: 0; }
+        .prog-item { display: flex; align-items: center; gap: 20px; background: var(--card-bg); padding: 20px; margin-bottom: 15px; border-radius: 15px; border-left: 5px solid transparent; }
+        .prog-item.active-now { border-left: 5px solid var(--danger); background: rgba(255,0,0,0.05); }
+        .prog-img-circle { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); flex-shrink: 0; }
 
-        footer { background: #000; padding: 60px 20px 30px; border-top: 2px solid #222; margin-top: 100px; }
-        .footer-main { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; }
-        .footer-col h4 { color: var(--primary); margin-bottom: 20px; text-transform: uppercase; font-size: 0.9rem; }
-        .footer-col a { display: block; color: #888; text-decoration: none; margin-bottom: 10px; font-size: 0.9rem; }
-        .footer-col a:hover { color: var(--primary); }
+        footer { background: #000; padding: 60px 20px 30px; border-top: 2px solid #222; margin-top: 100px; }
+        .footer-main { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; }
+        .footer-col h4 { color: var(--primary); margin-bottom: 20px; text-transform: uppercase; font-size: 0.9rem; }
+        .footer-col a { display: block; color: #888; text-decoration: none; margin-bottom: 10px; font-size: 0.9rem; }
+        .footer-col a:hover { color: var(--primary); }
 
-        .admin-form { background: var(--card-bg); padding: 20px; border-radius: 15px; margin-bottom: 20px; }
-        .admin-form input, .admin-form textarea, .admin-form select { width: 100%; padding: 10px; margin: 10px 0; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; }
+        .admin-form { background: var(--card-bg); padding: 20px; border-radius: 15px; margin-bottom: 20px; }
+        .admin-form input, .admin-form textarea, .admin-form select { width: 100%; padding: 10px; margin: 10px 0; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; }
 
-        @media (max-width: 768px) {
-            .section-flex, .footer-main { flex-direction: column; grid-template-columns: 1fr; }
-            .hero-img { width: 100%; height: auto; }
-            nav { gap: 10px; font-size: 0.75rem; }
-        }
-    </style>
+        @media (max-width: 768px) {
+            .section-flex, .footer-main { flex-direction: column; grid-template-columns: 1fr; }
+            .hero-img { width: 100%; height: auto; }
+            nav { gap: 10px; font-size: 0.75rem; }
+        }
+    </style>
 </head>
 <body>
 
 <header>
-    <div class="header-top">
-        <div onclick="showPage('home')" class="logo-text">RADIO ESTASI</div>
-    </div>
-    <nav>
-        <div class="nav-item">LA RADIO
-            <div class="dropdown">
-                <div onclick="showPage('radio')">Chi Siamo</div>
-                <div onclick="showPage('palinsesto')">Palinsesto</div>
-                <div onclick="showPage('programmi')">Programmi</div>
-                <div onclick="showPage('repliche')">Repliche</div>
-            </div>
-        </div>
-        <div class="nav-item">NEWS
-            <div class="dropdown">
-                <div onclick="showPage('news')">Estasi News</div>
-                <div onclick="showPage('music-news')">Musica (Rockol)</div>
-            </div>
-        </div>
-        <div class="nav-item" onclick="showPage('team')">TEAM</div>
-        <div class="nav-item" onclick="showPage('eventi')">EVENTI</div>
-        <div class="nav-item" onclick="showPage('admin')" style="color:var(--primary)">ADMIN</div>
-    </nav>
-    <div class="player-bar">
-        <div class="play-controls">
-            <button class="play-btn" id="btnPlay">▶</button>
-            <div>
-                <div style="font-size: 0.65rem; color: var(--primary); font-weight: bold;">LIVE DA ROMA</div>
-                <div id="current-onair-title" style="font-size: 0.9rem; font-weight: 800;">Sintonizzazione...</div>
-            </div>
-        </div>
-        <audio id="audioStream" src="https://stream.zeno.fm/qvdruxs5fqvvv"></audio>
-        <div style="font-size: 0.7rem; color: #444;">128kbps AAC</div>
-    </div>
+    <div class="header-top">
+        <div onclick="showPage('home')" class="logo-text">RADIO ESTASI</div>
+    </div>
+    <nav>
+        <div class="nav-item">LA RADIO
+            <div class="dropdown">
+                <div onclick="showPage('radio')">Chi Siamo</div>
+                <div onclick="showPage('palinsesto')">Palinsesto</div>
+                <div onclick="showPage('programmi')">Programmi</div>
+                <div onclick="showPage('repliche')">Repliche</div>
+            </div>
+        </div>
+        <div class="nav-item" onclick="showPage('news')">NEWS</div>
+        <div class="nav-item" onclick="showPage('team')">TEAM</div>
+        <div class="nav-item" onclick="showPage('eventi')">EVENTI</div>
+        <div class="nav-item" onclick="showPage('admin')" style="color:var(--primary)">ADMIN</div>
+    </nav>
+    <div class="player-bar">
+        <div class="play-controls">
+            <button class="play-btn" id="btnPlay">▶</button>
+            <div>
+                <div style="font-size: 0.65rem; color: var(--primary); font-weight: bold;">LIVE DA ROMA</div>
+                <div id="current-onair-title" style="font-size: 0.9rem; font-weight: 800;">Sintonizzazione...</div>
+            </div>
+        </div>
+        <audio id="audioStream" src="https://stream.zeno.fm/qvdruxs5fqvvv"></audio>
+        <div style="font-size: 0.7rem; color: #444;">128kbps AAC</div>
+    </div>
 </header>
 
 <div id="content" class="container"></div>
 
 <footer>
-    <div class="footer-main">
-        <div class="footer-col">
-            <h2 style="color:var(--primary)">Radio Estasi</h2>
-            <p style="color:#555; font-size: 0.85rem; margin-top:10px;">Sintonizzati sul futuro di Roma.</p>
-        </div>
-        <div class="footer-col">
-            <h4>Pagine</h4>
-            <a href="#" onclick="showPage('news')">News</a>
-            <a href="#" onclick="showPage('radio')">Radio</a>
-            <a href="#" onclick="showPage('palinsesto')">Palinsesto</a>
-        </div>
-        <div class="footer-col">
-            <h4>Link Utili</h4>
-            <a href="#" onclick="showPage('archivio')">Archivio Opere</a>
-            <a href="https://forms.gle/JcgZjmnq2oBfk2S69" target="_blank">Partecipa alla diretta</a>
-            <a href="https://forms.gle/TzUcy5MApZrUBD7B6" target="_blank">Lavora con noi</a>
-            <a href="#" onclick="showPage('contatti')">Contattaci</a>
-            <a href="#" onclick="showPage('privacy')">Privacy Policy</a>
-        </div>
-        <div class="footer-col" style="text-align: right;">
-            <img src="favicon.jpg" width="80" style="border-radius: 10px;">
-        </div>
-    </div>
-    <div style="text-align:center; color:#333; font-size: 0.8rem; margin-top:50px;">© 2026 Radio Estasi. Tutti i diritti riservati.</div>
+    <div class="footer-main">
+        <div class="footer-col">
+            <h2 style="color:var(--primary)">Radio Estasi</h2>
+            <p style="color:#555; font-size: 0.85rem; margin-top:10px;">Sintonizzati sul futuro di Roma.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Pagine</h4>
+            <a href="#" onclick="showPage('news')">News</a>
+            <a href="#" onclick="showPage('radio')">Radio</a>
+            <a href="#" onclick="showPage('palinsesto')">Palinsesto</a>
+        </div>
+        <div class="footer-col">
+            <h4>Link Utili</h4>
+            <a href="#" onclick="showPage('archivio')">Archivio Opere</a>
+            <a href="https://forms.gle/JcgZjmnq2oBfk2S69" target="_blank">Partecipa alla diretta</a>
+            <a href="https://forms.gle/TzUcy5MApZrUBD7B6" target="_blank">Lavora con noi</a>
+            <a href="#" onclick="showPage('contatti')">Contattaci</a>
+            <a href="#" onclick="showPage('privacy')">Privacy Policy</a>
+        </div>
+        <div class="footer-col" style="text-align: right;">
+            <img src="favicon.jpg" width="80" style="border-radius: 10px;">
+        </div>
+    </div>
+    <div style="text-align:center; color:#333; font-size: 0.8rem; margin-top:50px;">© 2026 Radio Estasi. Tutti i diritti riservati.</div>
 </footer>
 
 <script>
-    const audio = document.getElementById('audioStream');
-    const btnPlay = document.getElementById('btnPlay');
-    
-    btnPlay.onclick = () => {
-        if (audio.paused) { audio.play(); btnPlay.innerText = "⏸"; }
-        else { audio.pause(); btnPlay.innerText = "▶"; }
-    };
+    const audio = document.getElementById('audioStream');
+    const btnPlay = document.getElementById('btnPlay');
+    
+    btnPlay.onclick = () => {
+        if (audio.paused) { audio.play(); btnPlay.innerText = "⏸"; }
+        else { audio.pause(); btnPlay.innerText = "▶"; }
+    };
 
-    const db = {
-        news: JSON.parse(localStorage.getItem('est_news')) || [],
-        eventi: JSON.parse(localStorage.getItem('est_eventi')) || []
-    };
+    const db = {
+        news: JSON.parse(localStorage.getItem('est_news')) || [],
+        eventi: JSON.parse(localStorage.getItem('est_eventi')) || []
+    };
 
-    function getRomeTime() { return new Date(new Date().toLocaleString("en-US", {timeZone: "Europe/Rome"})); }
+    function getRomeTime() { return new Date(new Date().toLocaleString("en-US", {timeZone: "Europe/Rome"})); }
 
-    async function renderMusicNews() {
-        const container = document.getElementById('music-news-list');
-        const RSS_URL = `https://www.rockol.it/rss/news`;
-        const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`;
+    function showPage(pageId) {
+        const c = document.getElementById('content');
+        window.scrollTo(0,0);
 
-        try {
-            const response = await fetch(API_URL);
-            const data = await response.json();
-            
-            if (data.status === 'ok') {
-                container.innerHTML = data.items.map(item => `
-                    <div class="admin-form" style="border-left: 4px solid #00c3ff;">
-                        <small style="color:#00c3ff">ROCKOL.IT</small>
-                        <h4 style="margin:5px 0">${item.title}</h4>
-                        <p style="font-size:0.85rem; margin:10px 0;">${item.description.replace(/<[^>]*>?/gm, '').substring(0, 150)}...</p>
-                        <a href="${item.link}" target="_blank" style="color:var(--primary); font-size:0.8rem; text-decoration:none; font-weight:bold;">LEGGI ARTICOLO COMPLETO →</a>
-                    </div>
-                `).join('');
-            } else {
-                container.innerHTML = "<p>Impossibile caricare le news musicali al momento.</p>";
-            }
-        } catch (error) {
-            container.innerHTML = "<p>Errore di connessione al feed di Rockol.</p>";
-        }
-    }
+        if (pageId === 'home') {
+            c.innerHTML = `
+                <section class="section-flex">
+                    <div class="hero-text">
+                        <h1>Benvenuto/a su Radio Estasi!</h1>
+                        <p>Sintonizzati su Radio Estasi, la tua dose quotidiana di energia e musica dalla zona di Roma. News, grandi hit e i migliori programmi streaming 24/7.</p>
+                        <a href="#" onclick="showPage('radio')" class="btn">Scopri la nostra storia</a>
+                    </div>
+                    <img src="favicon.jpg" class="hero-img">
+                </section>
+                
+                <section style="background: var(--card-bg); padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 60px; border: 1px solid rgba(255,204,0,0.2);">
+                    <h2 style="color:var(--primary)">Scarica la nostra App</h2>
+                    <p style="margin: 10px 0 20px;">Porta Radio Estasi sempre con te sul tuo smartphone Android!</p>
+                    <a href="https://www.appcreator24.com/app3189964-35h0xg" target="_blank" class="btn">SCARICA ORA</a>
+                </section>
 
-    function showPage(pageId) {
-        const c = document.getElementById('content');
-        window.scrollTo(0,0);
+                <h2>Ultime News</h2><div id="h-news">${renderNews(3)}</div>
+                <h2 style="margin-top:40px">Prossimi Eventi</h2><div id="h-eventi">${renderEventi(2)}</div>
+            `;
+        } 
+        else if (pageId === 'radio') {
+            c.innerHTML = `<h1>Chi Siamo</h1>
+            <p>Tutto ebbe inizio in una piccola stanza, con un vecchio microfono, un mixer economico e tanta voglia di sperimentare. Il protagonista di questa storia era solo un ragazzo curioso, affascinato da quel mondo invisibile fatto di onde radio e voci che attraversavano l’etere. Passava le ore a registrare finti programmi, a mixare musica e a immaginare un pubblico dall’altra parte dell’altoparlante.</p>
+            <p>Ogni giorno imparava qualcosa di nuovo: come migliorare l’audio, come creare una scaletta, come parlare in modo più sicuro davanti al microfono. Con pazienza e determinazione, iniziò ad acquistare attrezzature sempre più sofisticate: una console più potente, microfoni professionali, pannelli fonoassorbenti per isolare il suono. Quella che un tempo era solo una cameretta diventava, pezzo dopo pezzo, un vero e proprio studio radiofonico.</p>
+            <p>Fu allora che nacque Radio Estasi.</p>
+            <p>Il nome non fu scelto a caso: “Estasi” rappresentava l’emozione pura, quel brivido che provava ogni volta che andava in onda, anche se per pochi amici collegati online. All’inizio era tutto molto semplice: qualche diretta serale, musica selezionata con cura e interventi improvvisati. Ma bastò poco perché la passione cominciasse ad attirare l’attentione.</p>
+            <p>Arrivarono i primi ascoltatori, poi le prime collaborazioni, e infine anche i primi eventi dal vivo: piccole serate in locali, feste private, dirette on the road. Ogni evento era un’occasione per far conoscere la radio, per stringere contatti, per migliorare.</p>
+            <p>La postazione cresceva con lui. Da un semplice computer a una vera regia con più monitor, luci, software professionali e connessioni stabili per le dirette streaming. Il sogno stava prendendo forma reale. Radio Estasi non era più solo un progetto personale, ma una voce indipendente, giovane e vibrante, pronta a farsi sentire.</p>
+            <p>Oggi Radio Estasi è molto più di una web radio: è una community, un punto di riferimento per chi ama la musica, l’informazione libera e le emozioni vere. Ma dietro ogni successo, resta sempre viva l’immagine di quel ragazzo che, in una stanza troppo piccola per contenere la sua immaginazione, accese per la prima volta un microfono… e diede inizio a tutto.</p>`;
+        }
+        else if (pageId === 'news') { c.innerHTML = `<h1>News</h1><div>${renderNews(20)}</div>`; }
+        else if (pageId === 'eventi') { c.innerHTML = `<h1>Eventi</h1><div>${renderEventi(20)}</div>`; }
+        else if (pageId === 'team') { 
+            c.innerHTML = `<h1>Il Team</h1>
+                <div class="prog-item"><img src="mattia-chialastri.jpg" class="prog-img-circle"><div><h3>Mattia Chialastri <small>(Editore)</small></h3><p>Da piccolo credevo di essere un pazzo a voler diventare un tecnico di ascensori. Dopo gli ascensori sono passato alla mania per le autostrade e poi alla passione per gli aerei fino a quando ho scoperto un mondo fantastico, quello della radio. Mi sono sempre chiesto come abbia potuto cambiare così tante passioni, ma il mio istinto mi dice questo, fate solo cose positive!</p></div></div>
+                <div class="prog-item"><img src="sofia-chialastri.jpg" class="prog-img-circle"><div><h3>Sofia Chialastri <small>(Direttore Musicale)</small></h3><p>Fai della tua vita un sogno e di un sogno una realtà.</p></div></div>
+                <div class="prog-item"><img src="alessandro-sirica.jpg" class="prog-img-circle"><div><h3>Alessandro Sirica <small>(Conduttore)</small></h3><p>Vivo di passioni, sorrido poco ma sono quello che in classe faceva casino e che oggi trova sempre un motivo per fare festa! Fate i bravi e soprattutto buone cose. See ya!</p></div></div>
+                <div class="prog-item"><img src="favicon.jpg" class="prog-img-circle"><div><h3>Vittorina Di Vincenzo <small>(Speaker)</small></h3><p>Energia pura e voce che arriva dritta al cuore. Con la sua solarità trasforma ogni diretta in un momento indimenticabile, portando il sorriso nelle case di chi ascolta con eleganza e simpatia.</p></div></div>`; 
+        }
+        else if (pageId === 'palinsesto') { renderPalinsestoLayout(); }
+        else if (pageId === 'programmi') {
+            c.innerHTML = `<h1>I nostri Programmi</h1>
+                <div class="prog-item"><img src="wake-up-radio.png" class="prog-img-circle"><div><h3>Wake up radio</h3><p><strong>La tua mattina inizia qui</strong><br>Dalle 10 alle 13, Wake up radio è il programma radiofonico che trasforma le prime ore della giornata in un’esperienza piena di energia, musica e buonumore. Tra hit del momento, curiosità, notizie leggere e chiacchiere con gli ascoltatori, ogni puntata è un modo per partire con il piede giusto e affrontare la giornata con il sorriso. Con ritmo, leggerezza e tanta compagnia, il programma è pensato per chi vuole godersi la mattina senza fretta, ma senza mai perdere energia.<br>Wake up radio – perché iniziare bene è già metà giornata!</p></div></div>
+                <div class="prog-item"><img src="shuffle.png" class="prog-img-circle"><div><h3>Shuffle</h3><p><strong>La musica senza regole!</strong><br>Benvenuti in Shuffle, il programma radiofonico dove ogni brano è una sorpresa! Niente scalette rigide, niente generi predefiniti: qui la musica scorre libera, proprio come le tue emozioni. Dal pop all’indie, dal rock al funk, passando per hit del passato e nuove scoperte, Shuffle mescola tutto in un mix imprevedibile e irresistibile. Tra un brano e l’altro, curiosità musicali, storie dietro le canzoni, aneddoti sugli artisti e tanta interazione con gli ascoltatori, che possono proporre il loro pezzo “a sorpresa” della giornata.<br>Shuffle – perché la musica più bella è quella che non ti aspetti!</p></div></div>
+                <div class="prog-item"><img src="musica-soft.png" class="prog-img-circle"><div><h3>Musica Soft</h3><p><strong>La colonna sonora dei tuoi momenti tranquilli</strong><br>Lasciati avvolgere dal suono morbido di Soft, il programma radiofonico dedicato alle melodie più rilassanti e raffinate. Una selezione di brani pop, soul, jazz e acoustic pensata per accompagnarti con calma, leggerezza e stile. Ogni puntata è un viaggio sonoro tra voci calde, arrangiamenti delicati e parole che arrivano dritte al cuore. Niente fretta, niente rumore — solo musica che fa respirare.<br>Musica soft – perché a volte basta una nota dolce per cambiare l’umore della giornata.</p></div></div>
+                <div class="prog-item"><img src="cado-tra-le-pagine.png" class="prog-img-circle"><div><h3>Cado tra le pagine</h3><p><strong>Storie per addormentarsi con la mente e sognare con il cuore</strong><br>Cado tra le pagine è il programma radiofonico pensato per chi ama addormentarsi accompagnato dal suono delle parole. Ogni sera, prima di andare a letto, scegliamo per voi un libro e ne leggiamo un capitolo in diretta, per regalarvi un momento di calma, immaginazione e dolce intimità. Tra romanzi, racconti e pagine intramontabili, lasciatevi cullare dalle voci, dalle storie e dalle emozioni che prendono vita nell’aria. Perché, a volte, basta una buona storia per cadere… tra le pagine.<br>Cado tra le pagine – la buonanotte più bella è fatta di parole.</p></div></div>
+                <div class="prog-item"><img src="80-90.png" class="prog-img-circle"><div><h3>80' 90'</h3><p><strong>La musica che non passa mai di moda!</strong><br>Torna l’energia, lo stile e la magia di due decenni indimenticabili! 80’ 90’ è il programma radiofonico che ti fa rivivere le emozioni dei grandi successi che hanno fatto la storia della musica. Dai synth e le sonorità iconiche degli anni Ottanta alla rivoluzione pop, rock e dance dei Novanta, ogni puntata è un viaggio nel tempo tra hit, curiosità, aneddoti e ricordi. Con la conduzione frizzante e tanta passione, 80’ 90’ ti riporta alle colonne sonore della tua vita – quelle che ancora oggi fanno cantare, ballare e sognare.<br>80’ 90’ – Due decenni, una sola grande emozione!</p></div></div>`;
+        }
+        else if (pageId === 'contatti') {
+            c.innerHTML = `<h1>Contattaci</h1><p>Email: radioestasi1@gmail.com</p><p>Tel: 3924758156</p>`;
+        }
+        else if (pageId === 'privacy') {
+            c.innerHTML = `<h1>Privacy Policy</h1>
+            <p><strong>1. Chi siamo</strong><br>Radio Estasi – La radio del futuro!<br>Per qualsiasi domanda o richiesta riguardo la privacy puoi scrivere a: radioestasi1@gmail.com</p>
+            <p><strong>2. Dati raccolti</strong><br>Quando ti iscrivi alla newsletter del nostro sito, raccogliamo il tuo nome e il tuo indirizzo email.</p>
+            <p><strong>3. Uso dei dati</strong><br>I dati raccolti vengono utilizzati esclusivamente per rispondere alle tue richieste e per inviarti la newsletter.</p>
+            <p><strong>4. Condivisione dei dati</strong><br>I tuoi dati personali non sono condivisi con nessuno.</p>
+            <p><strong>5. Diritti degli utenti</strong><br>Hai il diritto di accedere ai tuoi dati, correggerli o chiederne la cancellazione in qualsiasi momento. Poiché nessun dato viene trattato senza il tuo consenso, non è previsto il diritto di opposizione.</p>
+            <p><strong>6. Cookie</strong><br>Al momento non utilizziamo cookie o altri strumenti di tracciamento.</p>
+            <p><strong>7. Conservazione dei dati</strong><br>Conserviamo i tuoi dati fino a quando non richiedi la loro eliminazione.</p>
+            <p><strong>8. Contatti</strong><br>Per esercitare i tuoi diritti o per qualsiasi domanda riguardo la privacy, puoi contattarci all’indirizzo email: radioestasi1@gmail.com</p>`;
+        }
+        else if (pageId === 'admin') {
+            let p = prompt("Password:");
+            if(p === "estasi2026") renderAdminPanel();
+            else showPage('home');
+        }
+        updateGlobalOnAir();
+    }
 
-        if (pageId === 'home') {
-            c.innerHTML = `
-                <section class="section-flex">
-                    <div class="hero-text">
-                        <h1>Benvenuto/a su Radio Estasi!</h1>
-                        <p>Sintonizzati su Radio Estasi, la tua dose quotidiana di energia e musica dalla zona di Roma. News, grandi hit e i migliori programmi streaming 24/7.</p>
-                        <a href="#" onclick="showPage('radio')" class="btn">Scopri la nostra storia</a>
-                    </div>
-                    <img src="favicon.jpg" class="hero-img">
-                </section>
-                
-                <section style="background: var(--card-bg); padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 60px; border: 1px solid rgba(255,204,0,0.2);">
-                    <h2 style="color:var(--primary)">Scarica la nostra App</h2>
-                    <p style="margin: 10px 0 20px;">Porta Radio Estasi sempre con te sul tuo smartphone Android!</p>
-                    <a href="https://www.appcreator24.com/app3189964-35h0xg" target="_blank" class="btn">SCARICA ORA</a>
-                </section>
+    function renderNews(limit) {
+        if(!db.news.length) return "<p>Nessuna news presente.</p>";
+        return db.news.slice(0, limit).map(n => `<div class="admin-form"><small style="color:var(--primary)">${n.cat}</small><h4>${n.t}</h4><p>${n.d}</p></div>`).join('');
+    }
 
-                <h2>Ultime News</h2><div id="h-news">${renderNews(3)}</div>
-                <h2 style="margin-top:40px">Prossimi Eventi</h2><div id="h-eventi">${renderEventi(2)}</div>
-            `;
-        } 
-        else if (pageId === 'radio') {
-            c.innerHTML = `<h1>Chi Siamo</h1>
-            <p>Tutto ebbe inizio in una piccola stanza, con un vecchio microfono, un mixer economico e tanta voglia di sperimentare. Il protagonista di questa storia era solo un ragazzo curioso, affascinato da quel mondo invisibile fatto di onde radio e voci che attraversavano l’etere...</p>
-            <p>Fu allora che nacque Radio Estasi.</p>
-            <p>Il nome non fu scelto a caso: “Estasi” rappresentava l’emozione pura, quel brivido che provava ogni volta che andava in onda...</p>`;
-        }
-        else if (pageId === 'news') { c.innerHTML = `<h1>Estasi News</h1><div>${renderNews(20)}</div>`; }
-        else if (pageId === 'music-news') { 
-            c.innerHTML = `<h1>News dalla Musica</h1><div id="music-news-list">Caricamento notizie da Rockol...</div>`; 
-            renderMusicNews();
-        }
-        else if (pageId === 'eventi') { c.innerHTML = `<h1>Eventi</h1><div>${renderEventi(20)}</div>`; }
-        else if (pageId === 'team') { 
-            c.innerHTML = `<h1>Il Team</h1>
-                <div class="prog-item"><img src="mattia-chialastri.jpg" class="prog-img-circle"><div><h3>Mattia Chialastri <small>(Editore)</small></h3><p>Da piccolo credevo di essere un pazzo a voler diventare un tecnico di ascensori...</p></div></div>
-                <div class="prog-item"><img src="sofia-chialastri.jpg" class="prog-img-circle"><div><h3>Sofia Chialastri <small>(Direttore Musicale)</small></h3><p>Fai della tua vita un sogno e di un sogno una realtà.</p></div></div>`; 
-        }
-        else if (pageId === 'palinsesto') { renderPalinsestoLayout(); }
-        else if (pageId === 'programmi') {
-            c.innerHTML = `<h1>I nostri Programmi</h1>
-                <div class="prog-item"><img src="wake-up-radio.png" class="prog-img-circle"><div><h3>Wake up radio</h3><p>La tua mattina inizia qui...</p></div></div>
-                <div class="prog-item"><img src="shuffle.png" class="prog-img-circle"><div><h3>Shuffle</h3><p>La musica senza regole!</p></div></div>`;
-        }
-        else if (pageId === 'contatti') {
-            c.innerHTML = `<h1>Contattaci</h1><p>Email: radioestasi1@gmail.com</p><p>Tel: 3924758156</p>`;
-        }
-        else if (pageId === 'admin') {
-            let p = prompt("Password:");
-            if(p === "estasi2026") renderAdminPanel();
-            else showPage('home');
-        }
-        updateGlobalOnAir();
-    }
+    function renderEventi(limit) {
+        if(!db.eventi.length) return "<p>Nessun evento in programma.</p>";
+        return db.eventi.slice(0, limit).map(e => `<div style="border-left:4px solid var(--primary); padding-left:15px; margin-bottom:20px;"><h4>${e.t}</h4><p>${e.d}</p><small>📍 ${e.loc} | ⏰ ${e.ora} | 🎙 Presenti: ${e.team}</small></div>`).join('');
+    }
 
-    function renderNews(limit) {
-        if(!db.news.length) return "<p>Nessuna news presente.</p>";
-        return db.news.slice(0, limit).map(n => `<div class="admin-form"><small style="color:var(--primary)">${n.cat}</small><h4>${n.t}</h4><p>${n.d}</p></div>`).join('');
-    }
+    function renderAdminPanel() {
+        document.getElementById('content').innerHTML = `
+            <h1>Admin Panel</h1>
+            <div class="admin-form">
+                <h3>Aggiungi News</h3>
+                <input type="text" id="news-t" placeholder="Titolo della news">
+                <textarea id="news-d" placeholder="Testo della notizia"></textarea>
+                <select id="news-cat">
+                    <option value="curiosità">curiosità</option>
+                    <option value="estasi news">estasi news</option>
+                    <option value="attualità">attualità</option>
+                    <option value="altro">altro</option>
+                </select>
+                <button class="btn" onclick="saveNews()">Salva News</button>
+            </div>
+            <div class="admin-form">
+                <h3>Aggiungi Evento</h3>
+                <input type="text" id="ev-t" placeholder="Nome dell'evento">
+                <textarea id="ev-d" placeholder="Descrizione"></textarea>
+                <input type="text" id="ev-loc" placeholder="Luogo">
+                <input type="text" id="ev-ora" placeholder="Ora">
+                <select id="ev-team">
+                    <option value="Mattia Chialastri">Mattia Chialastri</option>
+                    <option value="Sofia Chialastri">Sofia Chialastri</option>
+                    <option value="Alessandro Sirica">Alessandro Sirica</option>
+                    <option value="Vittorina Di Vincenzo">Vittorina Di Vincenzo</option>
+                </select>
+                <button class="btn" onclick="saveEvento()">Salva Evento</button>
+            </div>
+            <button class="btn" style="background:#444; color:#fff" onclick="localStorage.clear(); location.reload();">Resetta Tutto</button>`;
+    }
 
-    function renderEventi(limit) {
-        if(!db.eventi.length) return "<p>Nessun evento in programma.</p>";
-        return db.eventi.slice(0, limit).map(e => `<div style="border-left:4px solid var(--primary); padding-left:15px; margin-bottom:20px;"><h4>${e.t}</h4><p>${e.d}</p><small>📍 ${e.loc} | ⏰ ${e.ora} | 🎙 Presenti: ${e.team}</small></div>`).join('');
-    }
+    function saveNews() {
+        const n = { t: document.getElementById('news-t').value, d: document.getElementById('news-d').value, cat: document.getElementById('news-cat').value };
+        db.news.unshift(n);
+        localStorage.setItem('est_news', JSON.stringify(db.news));
+        alert("News Salvata!");
+        showPage('news');
+    }
 
-    function renderAdminPanel() {
-        document.getElementById('content').innerHTML = `
-            <h1>Admin Panel</h1>
-            <div class="admin-form">
-                <h3>Aggiungi News</h3>
-                <input type="text" id="news-t" placeholder="Titolo della news">
-                <textarea id="news-d" placeholder="Testo della notizia"></textarea>
-                <select id="news-cat">
-                    <option value="curiosità">curiosità</option>
-                    <option value="estasi news">estasi news</option>
-                    <option value="attualità">attualità</option>
-                    <option value="altro">altro</option>
-                </select>
-                <button class="btn" onclick="saveNews()">Salva News</button>
-            </div>
-            <div class="admin-form">
-                <h3>Aggiungi Evento</h3>
-                <input type="text" id="ev-t" placeholder="Nome dell'evento">
-                <textarea id="ev-d" placeholder="Descrizione"></textarea>
-                <input type="text" id="ev-loc" placeholder="Luogo">
-                <input type="text" id="ev-ora" placeholder="Ora">
-                <select id="ev-team">
-                    <option value="Mattia Chialastri">Mattia Chialastri</option>
-                    <option value="Sofia Chialastri">Sofia Chialastri</option>
-                    <option value="Alessandro Sirica">Alessandro Sirica</option>
-                    <option value="Vittorina Di Vincenzo">Vittorina Di Vincenzo</option>
-                </select>
-                <button class="btn" onclick="saveEvento()">Salva Evento</button>
-            </div>
-            <button class="btn" style="background:#444; color:#fff" onclick="localStorage.clear(); location.reload();">Resetta Tutto</button>`;
-    }
+    function saveEvento() {
+        const e = { 
+            t: document.getElementById('ev-t').value, 
+            d: document.getElementById('ev-d').value, 
+            loc: document.getElementById('ev-loc').value, 
+            ora: document.getElementById('ev-ora').value,
+            team: document.getElementById('ev-team').value 
+        };
+        db.eventi.unshift(e);
+        localStorage.setItem('est_eventi', JSON.stringify(db.eventi));
+        alert("Evento Salvato!");
+        showPage('eventi');
+    }
 
-    function saveNews() {
-        const n = { t: document.getElementById('news-t').value, d: document.getElementById('news-d').value, cat: document.getElementById('news-cat').value };
-        db.news.unshift(n);
-        localStorage.setItem('est_news', JSON.stringify(db.news));
-        alert("News Salvata!");
-        showPage('news');
-    }
+    function renderPalinsestoLayout() {
+        const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+        const today = days[getRomeTime().getDay()];
+        document.getElementById('content').innerHTML = `<h1>Palinsesto</h1><div style="display:flex; gap:10px; overflow-x:auto; margin-bottom:20px;">
+            ${days.map(d => `<button class="btn" style="background:${d===today?'var(--danger)':'#222'}; color:#fff" onclick="renderDaySchedule('${d}')">${d}</button>`).join('')}
+        </div><div id="schedule-list"></div>`;
+        renderDaySchedule(today);
+    }
 
-    function saveEvento() {
-        const e = { 
-            t: document.getElementById('ev-t').value, 
-            d: document.getElementById('ev-d').value, 
-            loc: document.getElementById('ev-loc').value, 
-            ora: document.getElementById('ev-ora').value,
-            team: document.getElementById('ev-team').value 
-        };
-        db.eventi.unshift(e);
-        localStorage.setItem('est_eventi', JSON.stringify(db.eventi));
-        alert("Evento Salvato!");
-        showPage('eventi');
-    }
+    function renderDaySchedule(dayName) {
+        const list = document.getElementById('schedule-list');
+        const hour = getRomeTime().getHours();
+        const isToday = (dayName === ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'][getRomeTime().getDay()]);
+        
+        let schedule = [
+            {s:0,e:1,t:"Musica Soft",i:"musica-soft.png"},
+            {s:1,e:8,t:"Shuffle",i:"shuffle.png"},
+            {s:8,e:10,t:"Musica 80-90",i:"80-90.png"}
+        ];
 
-    function renderPalinsestoLayout() {
-        const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
-        const today = days[getRomeTime().getDay()];
-        document.getElementById('content').innerHTML = `<h1>Palinsesto</h1><div style="display:flex; gap:10px; overflow-x:auto; margin-bottom:20px;">
-            ${days.map(d => `<button class="btn" style="background:${d===today?'var(--danger)':'#222'}; color:#fff" onclick="renderDaySchedule('${d}')">${d}</button>`).join('')}
-        </div><div id="schedule-list"></div>`;
-        renderDaySchedule(today);
-    }
+        if(dayName === 'Sabato' || dayName === 'Domenica') {
+            schedule.push({s:10,e:13,t:"Mattia Chialastri",i:"mattia-chialastri.jpg"});
+            schedule.push({s:13,e:20,t:"Shuffle",i:"shuffle.png"});
+        } else {
+            schedule.push({s:10,e:20,t:"Shuffle",i:"shuffle.png"});
+        }
 
-    function renderDaySchedule(dayName) {
-        const list = document.getElementById('schedule-list');
-        const hour = getRomeTime().getHours();
-        const isToday = (dayName === ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'][getRomeTime().getDay()]);
-        
-        let schedule = [
-            {s:0,e:1,t:"Musica Soft",i:"musica-soft.png"},
-            {s:1,e:8,t:"Shuffle",i:"shuffle.png"},
-            {s:8,e:10,t:"Musica 80-90",i:"80-90.png"}
-        ];
+        schedule.push({s:20,e:21,t:"Musica 80-90",i:"80-90.png"});
+        schedule.push({s:21,e:24,t:"Musica Soft",i:"musica-soft.png"});
+        
+        list.innerHTML = schedule.sort((a,b)=>a.s-b.s).map(p => `
+            <div class="prog-item ${isToday && hour>=p.s && hour<p.e ? 'active-now' : ''}">
+                <div style="width:60px; font-weight:800; color:var(--primary)">${p.s}:00</div>
+                <img src="${p.i}" class="prog-img-circle" style="width:50px; height:50px">
+                <div>${isToday && hour>=p.s && hour<p.e ? '<span class="on-air-badge">ON AIR</span>' : ''}<strong>${p.t}</strong></div>
+            </div>`).join('');
+    }
 
-        if(dayName === 'Sabato' || dayName === 'Domenica') {
-            schedule.push({s:10,e:13,t:"Mattia Chialastri",i:"mattia-chialastri.jpg"});
-            schedule.push({s:13,e:20,t:"Shuffle",i:"shuffle.png"});
-        } else {
-            schedule.push({s:10,e:20,t:"Shuffle",i:"shuffle.png"});
-        }
+    function updateGlobalOnAir() {
+        const now = getRomeTime();
+        const h = now.getHours();
+        const d = now.getDay();
+        let cur = "Shuffle";
+        
+        if (h >= 21 || (h >= 0 && h < 1)) cur = "Musica Soft";
+        else if (h >= 20 && h < 21) cur = "Musica 80-90";
+        else if (h >= 8 && h < 10) cur = "Musica 80-90";
+        else if ((d === 0 || d === 6) && h >= 10 && h < 13) cur = "Mattia Chialastri";
+        
+        document.getElementById('current-onair-title').innerText = cur;
+    }
 
-        schedule.push({s:20,e:21,t:"Musica 80-90",i:"80-90.png"});
-        schedule.push({s:21,e:24,t:"Musica Soft",i:"musica-soft.png"});
-        
-        list.innerHTML = schedule.sort((a,b)=>a.s-b.s).map(p => `
-            <div class="prog-item ${isToday && hour>=p.s && hour<p.e ? 'active-now' : ''}">
-                <div style="width:60px; font-weight:800; color:var(--primary)">${p.s}:00</div>
-                <img src="${p.i}" class="prog-img-circle" style="width:50px; height:50px">
-                <div>${isToday && hour>=p.s && hour<p.e ? '<span class="on-air-badge">ON AIR</span>' : ''}<strong>${p.t}</strong></div>
-            </div>`).join('');
-    }
-
-    function updateGlobalOnAir() {
-        const now = getRomeTime();
-        const h = now.getHours();
-        const d = now.getDay();
-        let cur = "Shuffle";
-        
-        if (h >= 21 || (h >= 0 && h < 1)) cur = "Musica Soft";
-        else if (h >= 20 && h < 21) cur = "Musica 80-90";
-        else if (h >= 8 && h < 10) cur = "Musica 80-90";
-        else if ((d === 0 || d === 6) && h >= 10 && h < 13) cur = "Mattia Chialastri";
-        
-        document.getElementById('current-onair-title').innerText = cur;
-    }
-
-    showPage('home');
-    setInterval(updateGlobalOnAir, 30000);
+    showPage('home');
+    setInterval(updateGlobalOnAir, 30000);
 </script>
 </body>
 </html>
+Voglio mettere una sottopagina delle news dedicata allenotizie sulla musica, basandosi sul feed rss: https://www.rockol.it/rss/news
+TOCCA SOLO QUELLO CHE TI HO CHIESTO, NON MODIFICARE ALTRO!
