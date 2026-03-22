@@ -122,7 +122,7 @@
 
         .prog-item { display: flex; align-items: center; gap: 20px; background: var(--card-bg); padding: 20px; margin-bottom: 15px; border-radius: 15px; border-left: 5px solid transparent; }
         .prog-item.active-now { border-left: 5px solid var(--danger); background: rgba(255,0,0,0.05); }
-        .prog-img-circle { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+        .prog-img-circle { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); flex-shrink: 0; }
 
         footer { background: #000; padding: 60px 20px 30px; border-top: 2px solid #222; margin-top: 100px; }
         .footer-main { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; }
@@ -237,8 +237,14 @@
             `;
         } 
         else if (pageId === 'radio') {
-            c.innerHTML = `<h1>La nostra storia</h1><p>Tutto ebbe inizio in una piccola stanza... [Testo integrale caricato correttamente]</p>`;
-            // (Il testo completo della storia va qui come nel codice precedente)
+            c.innerHTML = `<h1>Chi Siamo</h1>
+            <p>Tutto ebbe inizio in una piccola stanza, con un vecchio microfono, un mixer economico e tanta voglia di sperimentare. Il protagonista di questa storia era solo un ragazzo curioso, affascinato da quel mondo invisibile fatto di onde radio e voci che attraversavano l’etere. Passava le ore a registrare finti programmi, a mixare musica e a immaginare un pubblico dall’altra parte dell’altoparlante.</p>
+            <p>Ogni giorno imparava qualcosa di nuovo: come migliorare l’audio, come creare una scaletta, come parlare in modo più sicuro davanti al microfono. Con pazienza e determinazione, iniziò ad acquistare attrezzature sempre più sofisticate: una console più potente, microfoni professionali, pannelli fonoassorbenti per isolare il suono. Quella che un tempo era solo una cameretta diventava, pezzo dopo pezzo, un vero e proprio studio radiofonico.</p>
+            <p>Fu allora che nacque Radio Estasi.</p>
+            <p>Il nome non fu scelto a caso: “Estasi” rappresentava l’emozione pura, quel brivido che provava ogni volta che andava in onda, anche se per pochi amici collegati online. All’inizio era tutto molto semplice: qualche diretta serale, musica selezionata con cura e interventi improvvisati. Ma bastò poco perché la passione cominciasse ad attirare l’attentione.</p>
+            <p>Arrivarono i primi ascoltatori, poi le prime collaborazioni, e infine anche i primi eventi dal vivo: piccole serate in locali, feste private, dirette on the road. Ogni evento era un’occasione per far conoscere la radio, per stringere contatti, per migliorare.</p>
+            <p>La postazione cresceva con lui. Da un semplice computer a una vera regia con più monitor, luci, software professionali e connessioni stabili per le dirette streaming. Il sogno stava prendendo forma reale. Radio Estasi non era più solo un progetto personale, ma una voce indipendente, giovane e vibrante, pronta a farsi sentire.</p>
+            <p>Oggi Radio Estasi è molto più di una web radio: è una community, un punto di riferimento per chi ama la musica, l’informazione libera e le emozioni vere. Ma dietro ogni successo, resta sempre viva l’immagine di quel ragazzo che, in una stanza troppo piccola per contenere la sua immaginazione, accese per la prima volta un microfono… e diede inizio a tutto.</p>`;
         }
         else if (pageId === 'news') { c.innerHTML = `<h1>News</h1><div>${renderNews(20)}</div>`; }
         else if (pageId === 'eventi') { c.innerHTML = `<h1>Eventi</h1><div>${renderEventi(20)}</div>`; }
@@ -248,14 +254,29 @@
         else if (pageId === 'palinsesto') { renderPalinsestoLayout(); }
         else if (pageId === 'programmi') {
             c.innerHTML = `<h1>I nostri Programmi</h1>
-                <div class="prog-item"><img src="wake-up-radio.png" class="prog-img-circle"><div><h3>Wake up radio</h3><p>10:00 - 13:00</p></div></div>
-                <div class="prog-item"><img src="80-90.png" class="prog-img-circle"><div><h3>80' 90'</h3><p>Il meglio della musica vintage.</p></div></div>`;
+                <div class="prog-item"><img src="wake-up-radio.png" class="prog-img-circle"><div><h3>Wake up radio</h3><p><strong>La tua mattina inizia qui</strong><br>Dalle 10 alle 13, Wake up radio è il programma radiofonico che trasforma le prime ore della giornata in un’esperienza piena di energia, musica e buonumore. Tra hit del momento, curiosità, notizie leggere e chiacchiere con gli ascoltatori, ogni puntata è un modo per partire con il piede giusto e affrontare la giornata con il sorriso. Con ritmo, leggerezza e tanta compagnia, il programma è pensato per chi vuole godersi la mattina senza fretta, ma senza mai perdere energia.<br>Wake up radio – perché iniziare bene è già metà giornata!</p></div></div>
+                
+                <div class="prog-item"><img src="shuffle.png" class="prog-img-circle"><div><h3>Shuffle</h3><p><strong>La musica senza regole!</strong><br>Benvenuti in Shuffle, il programma radiofonico dove ogni brano è una sorpresa! Niente scalette rigide, niente generi predefiniti: qui la musica scorre libera, proprio come le tue emozioni. Dal pop all’indie, dal rock al funk, passando per hit del passato e nuove scoperte, Shuffle mescola tutto in un mix imprevedibile e irresistibile. Tra un brano e l’altro, curiosità musicali, storie dietro le canzoni, aneddoti sugli artisti e tanta interazione con gli ascoltatori, che possono proporre il loro pezzo “a sorpresa” della giornata.<br>Shuffle – perché la musica più bella è quella che non ti aspetti!</p></div></div>
+                
+                <div class="prog-item"><img src="musica-soft.png" class="prog-img-circle"><div><h3>Musica Soft</h3><p><strong>La colonna sonora dei tuoi momenti tranquilli</strong><br>Lasciati avvolgere dal suono morbido di Soft, il programma radiofonico dedicato alle melodie più rilassanti e raffinate. Una selezione di brani pop, soul, jazz e acoustic pensata per accompagnarti con calma, leggerezza e stile. Ogni puntata è un viaggio sonoro tra voci calde, arrangiamenti delicati e parole che arrivano dritte al cuore. Niente fretta, niente rumore — solo musica che fa respirare.<br>Musica soft – perché a volte basta una nota dolce per cambiare l’umore della giornata.</p></div></div>
+                
+                <div class="prog-item"><img src="cado-tra-le-pagine.png" class="prog-img-circle"><div><h3>Cado tra le pagine</h3><p><strong>Storie per addormentarsi con la mente e sognare con il cuore</strong><br>Cado tra le pagine è il programma radiofonico pensato per chi ama addormentarsi accompagnato dal suono delle parole. Ogni sera, prima di andare a letto, scegliamo per voi un libro e ne leggiamo un capitolo in diretta, per regalarvi un momento di calma, immaginazione e dolce intimità. Tra romanzi, racconti e pagine intramontabili, lasciatevi cullare dalle voci, dalle storie e dalle emozioni che prendono vita nell’aria. Perché, a volte, basta una buona storia per cadere… tra le pagine.<br>Cado tra le pagine – la buonanotte più bella è fatta di parole.</p></div></div>
+                
+                <div class="prog-item"><img src="80-90.png" class="prog-img-circle"><div><h3>80' 90'</h3><p><strong>La musica che non passa mai di moda!</strong><br>Torna l’energia, lo stile e la magia di due decenni indimenticabili! 80’ 90’ è il programma radiofonico che ti fa rivivere le emozioni dei grandi successi che hanno fatto la storia della musica. Dai synth e le sonorità iconiche degli anni Ottanta alla rivoluzione pop, rock e dance dei Novanta, ogni puntata è un viaggio nel tempo tra hit, curiosità, aneddoti e ricordi. Con la conduzione frizzante e tanta passione, 80’ 90’ ti riporta alle colonne sonore della tua vita – quelle che ancora oggi fanno cantare, ballare e sognare.<br>80’ 90’ – Due decenni, una sola grande emozione!</p></div></div>`;
         }
         else if (pageId === 'contatti') {
             c.innerHTML = `<h1>Contattaci</h1><p>Email: radioestasi1@gmail.com</p><p>Tel: 3924758156</p>`;
         }
         else if (pageId === 'privacy') {
-            c.innerHTML = `<h1>Privacy Policy</h1><p>[Testo integrale caricato correttamente]</p>`;
+            c.innerHTML = `<h1>Privacy Policy</h1>
+            <p><strong>1. Chi siamo</strong><br>Radio Estasi – La radio del futuro!<br>Per qualsiasi domanda o richiesta riguardo la privacy puoi scrivere a: radioestasi1@gmail.com</p>
+            <p><strong>2. Dati raccolti</strong><br>Quando ti iscrivi alla newsletter del nostro sito, raccogliamo il tuo nome e il tuo indirizzo email.</p>
+            <p><strong>3. Uso dei dati</strong><br>I dati raccolti vengono utilizzati esclusivamente per rispondere alle tue richieste e per inviarti la newsletter.</p>
+            <p><strong>4. Condivisione dei dati</strong><br>I tuoi dati personali non sono condivisi con nessuno.</p>
+            <p><strong>5. Diritti degli utenti</strong><br>Hai il diritto di accedere ai tuoi dati, correggerli o chiederne la cancellazione in qualsiasi momento. Poiché nessun dato viene trattato senza il tuo consenso, non è previsto il diritto di opposizione.</p>
+            <p><strong>6. Cookie</strong><br>Al momento non utilizziamo cookie o altri strumenti di tracciamento.</p>
+            <p><strong>7. Conservazione dei dati</strong><br>Conserviamo i tuoi dati fino a quando non richiedi la loro eliminazione.</p>
+            <p><strong>8. Contatti</strong><br>Per esercitare i tuoi diritti o per qualsiasi domanda riguardo la privacy, puoi contattarci all’indirizzo email: radioestasi1@gmail.com</p>`;
         }
         else if (pageId === 'admin') {
             let p = prompt("Password:");
@@ -293,14 +314,12 @@
         const hour = getRomeTime().getHours();
         const isToday = (dayName === ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'][getRomeTime().getDay()]);
         
-        // Struttura Orari Base
         let schedule = [
             {s:0,e:1,t:"Musica Soft",i:"musica-soft.png"},
             {s:1,e:8,t:"Shuffle",i:"shuffle.png"},
             {s:8,e:10,t:"Musica 80-90",i:"80-90.png"}
         ];
 
-        // Weekend (Sabato e Domenica) ha Mattia Chialastri
         if(dayName === 'Sabato' || dayName === 'Domenica') {
             schedule.push({s:10,e:13,t:"Mattia Chialastri",i:"mattia-chialastri.jpg"});
             schedule.push({s:13,e:20,t:"Shuffle",i:"shuffle.png"});
@@ -308,7 +327,6 @@
             schedule.push({s:10,e:20,t:"Shuffle",i:"shuffle.png"});
         }
 
-        // Fasce serali fisse per ogni giorno
         schedule.push({s:20,e:21,t:"Musica 80-90",i:"80-90.png"});
         schedule.push({s:21,e:24,t:"Musica Soft",i:"musica-soft.png"});
         
