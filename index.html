@@ -191,7 +191,7 @@
                 <div id="current-onair-title" style="font-size: 0.9rem; font-weight: 800;">Sintonizzazione...</div>
             </div>
         </div>
-        <audio id="audioStream" src="http://stream.zeno.fm/qvdruxs5fqvvv"></audio>
+        <audio id="audioStream" src="https://stream.zeno.fm/qvdruxs5fqvvv"></audio>
         <div style="font-size: 0.7rem; color: #444;">128kbps AAC</div>
     </div>
 </header>
@@ -230,7 +230,6 @@
 </footer>
 
 <script>
-    // Audio Player Logic
     const audio = document.getElementById('audioStream');
     const btnPlay = document.getElementById('btnPlay');
     
@@ -244,7 +243,6 @@
         }
     };
 
-    // Database Locale
     const db = {
         news: JSON.parse(localStorage.getItem('est_news')) || [],
         eventi: JSON.parse(localStorage.getItem('est_eventi')) || []
@@ -362,7 +360,7 @@
         }
 
         else if (pageId === 'privacy') {
-            c.innerHTML = `<h1>Privacy Policy</h1><div style="background:var(--card-bg); padding:30px; border-radius:15px; font-size:0.9rem; white-space:pre-line;">1. Chi siamo... (testo inserito)</div>`;
+            c.innerHTML = `<h1>Privacy Policy</h1><div style="background:var(--card-bg); padding:30px; border-radius:15px; font-size:0.9rem; white-space:pre-line;">1. Chi siamo\nRadio Estasi – La radio del futuro!\n\n2. Dati raccolti\nNomi e indirizzi email per newsletter.\n\n3. Uso dei dati\nRispondere alle richieste.\n\n4. Condivisione\nNessuna condivisione.\n\n8. Contatti\nradioestasi1@gmail.com</div>`;
         }
 
         else if (pageId === 'admin') {
@@ -371,18 +369,13 @@
             else showPage('home');
         }
 
-        else {
-            c.innerHTML = `<h1>${pageId.toUpperCase()}</h1><p>Sezione in aggiornamento.</p>`;
-        }
         updateGlobalOnAir();
     }
 
-    // Helper: Card Programmi
     function renderProgCard(t, img, d) {
         return `<div class="prog-item"><img src="${img}" class="prog-img-circle"><div><h3 style="color:var(--primary)">${t}</h3><p>${d}</p></div></div>`;
     }
 
-    // Palinsesto Logica
     function renderPalinsestoLayout() {
         const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
         const today = days[getRomeTime().getDay()];
@@ -440,16 +433,16 @@
         const now = getRomeTime();
         const hour = now.getHours();
         const day = now.getDay();
-        let current = "Musica No-Stop";
+        let current = "Shuffle";
         
         const schedule = (day === 0 || day === 6) ? 
             [{s:10, e:13, t:"Mattia Chialastri"}] : [];
         
         schedule.forEach(p => { if(hour >= p.s && hour < p.e) current = p.t; });
-        document.getElementById('current-onair-title').innerText = current;
+        const titleTag = document.getElementById('current-onair-title');
+        if(titleTag) titleTag.innerText = current;
     }
 
-    // Admin, News e Eventi
     function renderNews(limit) {
         if(!db.news.length) return "<p>Nessuna news presente.</p>";
         return db.news.slice(0, limit).map(n => `<div style="background:var(--card-bg); padding:15px; border-radius:10px; margin-bottom:10px"><h4>${n.t}</h4><small>${n.d}</small></div>`).join('');
@@ -466,18 +459,18 @@
             <div class="pricing-grid">
                 <div class="price-card">
                     <h4>Nuova News</h4>
-                    <input id="nt" placeholder="Titolo"><br>
-                    <textarea id="nd" placeholder="Testo"></textarea><br>
+                    <input id="nt" placeholder="Titolo" style="margin:5px 0; padding:10px"><br>
+                    <textarea id="nd" placeholder="Testo" style="margin:5px 0; padding:10px"></textarea><br>
                     <button class="btn" onclick="saveNews()">Pubblica</button>
                 </div>
                 <div class="price-card">
                     <h4>Nuovo Evento</h4>
-                    <input id="et" placeholder="Titolo"><br>
-                    <input id="ed" placeholder="Data"><br>
+                    <input id="et" placeholder="Titolo" style="margin:5px 0; padding:10px"><br>
+                    <input id="ed" placeholder="Data" style="margin:5px 0; padding:10px"><br>
                     <button class="btn" onclick="saveEvento()">Salva</button>
                 </div>
             </div>
-            <button onclick="localStorage.clear(); location.reload()" style="color:red; background:none; border:none;">Resetta database</button>
+            <button onclick="localStorage.clear(); location.reload()" style="color:red; background:none; border:none; cursor:pointer; margin-top:20px;">Resetta database locale</button>
         `;
     }
 
@@ -493,9 +486,8 @@
         showPage('home');
     }
 
-    // Init
     showPage('home');
-    setInterval(updateGlobalOnAir, 60000);
+    setInterval(updateGlobalOnAir, 30000);
 </script>
 
 </body>
