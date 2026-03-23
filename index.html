@@ -124,7 +124,6 @@
         .prog-item.active-now { border-left: 5px solid var(--danger); background: rgba(255,0,0,0.05); }
         .prog-img-circle { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); flex-shrink: 0; }
 
-        /* Styles per Slider e Nuove Sezioni Home */
         .news-slider { position: relative; width: 100%; height: 300px; overflow: hidden; border-radius: 20px; margin-bottom: 40px; border: 1px solid #333; }
         .slide { position: absolute; width: 100%; height: 100%; opacity: 0; transition: 0.8s; display: flex; align-items: flex-end; text-decoration: none; }
         .slide.active { opacity: 1; }
@@ -308,7 +307,14 @@
 
     function renderNews(limit) {
         if(!db.news.length) return "<p>Nessuna news presente.</p>";
-        return db.news.slice(0, limit).map(n => `<div class="admin-form"><small style="color:var(--primary)">${n.cat}</small><h4>${n.t}</h4><p>${n.d}</p></div>`).join('');
+        return db.news.slice(0, limit).map(n => `
+            <div class="admin-form">
+                ${n.img ? `<img src="${n.img}" style="width:100%; max-height:300px; object-fit:cover; border-radius:10px; margin-bottom:15px;">` : ''}
+                <small style="color:var(--primary)">${n.cat}</small>
+                <h4>${n.t}</h4>
+                <p>${n.d}</p>
+            </div>
+        `).join('');
     }
 
     function renderEventi(limit) {
@@ -394,10 +400,70 @@
         document.getElementById('current-onair-title').innerText = cur;
     }
 
-    // Altre funzioni admin e palinsesto (rimaste invariate come richiesto)
-    function renderAdminPanel() { /* ... come prima ... */ }
-    function renderPalinsestoLayout() { /* ... come prima ... */ }
-    function renderDaySchedule() { /* ... come prima ... */ }
+    function renderAdminPanel() {
+        const c = document.getElementById('content');
+        c.innerHTML = `
+            <h1>Pannello Admin</h1>
+            <div class="admin-form">
+                <h3>Aggiungi News</h3>
+                <input type="text" id="n-title" placeholder="Titolo News">
+                <input type="text" id="n-cat" placeholder="Categoria (es. SPORT, MUSICA)">
+                <input type="text" id="n-img" placeholder="Link Immagine (URL)">
+                <textarea id="n-desc" placeholder="Testo della News"></textarea>
+                <button onclick="addNews()" class="btn">Pubblica News</button>
+            </div>
+            <div class="admin-form">
+                <h3>Aggiungi Evento</h3>
+                <input type="text" id="e-title" placeholder="Titolo Evento">
+                <input type="text" id="e-loc" placeholder="Luogo">
+                <input type="text" id="e-ora" placeholder="Ora/Data">
+                <textarea id="e-desc" placeholder="Dettagli Evento"></textarea>
+                <button onclick="addEvento()" class="btn">Pubblica Evento</button>
+            </div>
+        `;
+    }
+
+    function addNews() {
+        const t = document.getElementById('n-title').value;
+        const cat = document.getElementById('n-cat').value;
+        const img = document.getElementById('n-img').value;
+        const d = document.getElementById('n-desc').value;
+        if(t && d) {
+            db.news.unshift({t, cat, img, d});
+            localStorage.setItem('est_news', JSON.stringify(db.news));
+            alert("News aggiunta!");
+            showPage('admin');
+        }
+    }
+
+    function addEvento() {
+        const t = document.getElementById('e-title').value;
+        const loc = document.getElementById('e-loc').value;
+        const ora = document.getElementById('e-ora').value;
+        const d = document.getElementById('e-desc').value;
+        if(t && d) {
+            db.eventi.unshift({t, loc, ora, d});
+            localStorage.setItem('est_eventi', JSON.stringify(db.eventi));
+            alert("Evento aggiunto!");
+            showPage('admin');
+        }
+    }
+
+    function renderPalinsestoLayout() {
+        const c = document.getElementById('content');
+        c.innerHTML = `<h1>Palinsesto</h1><div id="p-content"></div>`;
+        const days = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
+        let html = "";
+        days.forEach((day, idx) => {
+            html += `<div style="margin-bottom:30px"><h3>${day}</h3>${renderDaySchedule(idx + 1)}</div>`;
+        });
+        document.getElementById('p-content').innerHTML = html;
+    }
+
+    function renderDaySchedule(dayIndex) {
+        // Logica semplice per riempire il palinsesto visivo
+        return `<div class="prog-item">08:00 - 20:00: Shuffle / 20:00 - 00:00: Speciali</div>`;
+    }
 
     showPage('home');
     setInterval(updateGlobalOnAir, 30000);
