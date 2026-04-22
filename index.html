@@ -401,7 +401,7 @@
         }
             else if (pageId === 'podcast') {
             c.innerHTML = `<h1>Repliche & Podcast</h1>
-                <p style="margin-bottom:30px; color:#888;">Riascolta le puntate andate in onda.</p>
+                <p style="margin-bottom:30px; color:#888;">Riascolta i contenuti andati in onda sulla radio.</p>
                 <div id="podcast-list">
                     ${db.podcasts.length === 0 ? '<p>Nessun podcast caricato.</p>' : db.podcasts.map(p => `
                         <div class="prog-item" style="flex-direction: column; align-items: flex-start; gap: 10px;">
