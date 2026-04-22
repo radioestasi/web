@@ -177,12 +177,12 @@
         <div class="nav-item" onclick="showPage('eventi')">EVENTI</div>
         <div class="nav-item" onclick="showPage('admin')" style="color:var(--primary)">ADMIN</div>
     </nav>
-    <div class="player-bar">
+   <div class="player-bar">
         <div class="play-controls">
             <button class="play-btn" id="btnPlay">▶</button>
             <div>
                 <div style="font-size: 0.65rem; color: var(--primary); font-weight: bold;">LIVE DA ROMA</div>
-                <div id="current-onair-title" style="font-size: 0.9rem; font-weight: 800;">Sintonizzazione...</div>
+                <div id="current-onair-title" style="font-size: 0.9rem; font-weight: 800;">RADIO ESTASI</div>
             </div>
         </div>
         <audio id="audioStream" src="https://stream.zeno.fm/qvdruxs5fqvvv"></audio>
@@ -235,12 +235,10 @@
         }
     };
 
-    // Calcola il programma in base all'ora di Roma
     function getCurrentProgramName() {
         const now = new Date(new Date().toLocaleString("en-US", {timeZone: "Europe/Rome"}));
         const h = now.getHours();
         const d = now.getDay();
-        
         if (h >= 21 || (h >= 0 && h < 1)) return "MUSICA SOFT";
         if (h >= 20 && h < 21) return "MUSICA 80-90";
         if ((d === 0 || d === 6) && h >= 10 && h < 13) return "MATTIA CHIALASTRI";
@@ -248,7 +246,7 @@
     }
 
     async function updateMetadata() {
-        // Imposta subito il programma a destra
+        // Scriviamo il programma a destra
         if(programDisplay) programDisplay.innerText = getCurrentProgramName();
 
         try {
@@ -265,16 +263,15 @@
                 
                 if (match && match[1]) {
                     const nuovoTitolo = match[1].trim();
-                    // Evita che il titolo sparisca se Zeno manda dati vuoti
-                    if (nuovoTitolo !== "") {
+                    // SE IL TITOLO NON È VUOTO, AGGIORNA IL DISPLAY
+                    if (nuovoTitolo !== "" && nuovoTitolo !== "-") {
                         titleDisplay.innerText = nuovoTitolo;
                     }
                 }
-                // Aggiorna il programma ogni volta che riceve dati (gestisce il cambio ora)
+                // Aggiorna il programma a destra ogni volta
                 if(programDisplay) programDisplay.innerText = getCurrentProgramName();
             }
         } catch (e) {
-            console.error("Errore connessione metadati, riprovo...");
             setTimeout(updateMetadata, 5000); 
         }
     }
