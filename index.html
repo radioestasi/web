@@ -452,14 +452,13 @@
             <button class="btn" onclick="saveEvento()">Salva Evento</button>
         </div>
 
-        <div class="admin-form">
-            <h3>Carica Podcast (Replica)</h3>
-            <input type="text" id="pod-t" placeholder="Titolo della puntata">
-            <input type="text" id="pod-d" placeholder="Breve descrizione">
-            <input type="text" id="pod-src" placeholder="Link file audio (URL .mp3)">
-            <button class="btn" onclick="savePodcast()">Salva Podcast</button>
-        </div>
-
+<div class="admin-form">
+    <h3>Carica Podcast (da Link Repository)</h3>
+    <input type="text" id="pod-t" placeholder="Titolo della puntata">
+    <input type="text" id="pod-d" placeholder="Breve descrizione">
+    <input type="text" id="pod-src" placeholder="Incolla qui il link Raw di GitHub">
+    <button class="btn" onclick="savePodcast()">Salva Podcast</button>
+</div>
         <button class="btn" style="background:#444; color:#fff" onclick="localStorage.clear(); location.reload();">Resetta Tutto</button>`;
 }
     function saveNews() {
@@ -483,27 +482,22 @@
         alert("Evento Salvato!");
         showPage('eventi');
     }
-    function savePodcast() {
+   function savePodcast() {
     const t = document.getElementById('pod-t').value;
     const d = document.getElementById('pod-d').value;
     const src = document.getElementById('pod-src').value;
 
-    // Controllo validità
     if (!t || !src) { 
-        alert("Inserisci almeno il titolo e il link del file audio!"); 
+        alert("Inserisci titolo e il link del file!"); 
         return; 
     }
 
     const p = { t, d, src };
-    
-    // Aggiunge al database locale
     db.podcasts.unshift(p);
-    
-    // Salva nel localStorage
     localStorage.setItem('est_podcasts', JSON.stringify(db.podcasts));
     
-    alert("Podcast salvato con successo!");
-    showPage('repliche'); // Ti porta subito a vedere il risultato
+    alert("Podcast collegato correttamente!");
+    showPage('repliche');
 }
 
     function renderPalinsestoLayout() {
