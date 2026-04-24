@@ -220,73 +220,205 @@
 </footer>
 
 <script>
-   const audio = document.getElementById('audioStream');
+    // 1. VARIABILI GLOBALI E DATABASE
+    const audio = document.getElementById('audioStream');
     const btnPlay = document.getElementById('btnPlay');
     const titleDisplay = document.getElementById('current-onair-title');
     const programDisplay = document.getElementById('program-display-player');
 
-    btnPlay.onclick = () => {
-        if (audio.paused) { 
-            audio.play(); 
-            btnPlay.innerText = "⏸"; 
-        } else { 
-            audio.pause(); 
-            btnPlay.innerText = "▶"; 
-        }
+    const db = {
+        news: JSON.parse(localStorage.getItem('est_news')) || [],
+        eventi: JSON.parse(localStorage.getItem('est_eventi')) || [],
+        podcasts: JSON.parse(localStorage.getItem('est_podcasts')) || []
     };
 
-   // 1. FUNZIONI DI UTILITÀ (Devono stare in alto)
+    // 2. FUNZIONI DI UTILITÀ (ORARIO E METADATI)
     function getRomeTime() { 
         return new Date(new Date().toLocaleString("en-US", {timeZone: "Europe/Rome"})); 
     }
 
+    function getCurrentProgramName() {
+        const now = getRomeTime();
+        const h = now.getHours();
+        const d = now.getDay();
+        if (h >= 21 || (h >= 0 && h < 1)) return "MUSICA SOFT";
+        if (h >= 20 && h < 21) return "MUSICA 80-90";
+        if ((d === 0 || d === 6) && h >= 10 && h < 13) return "MATTIA CHIALASTRI";
+        return "SHUFFLE";
+    }
+
+    async function updateMetadata() {
+        if(programDisplay) programDisplay.innerText = getCurrentProgramName();
+        try {
+            const r = await fetch('https://api.zeno.fm/mounts/metadata/subscribe/qvdruxs5fqvvv');
+            const reader = r.body.getReader();
+            const decoder = new TextDecoder();
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                const chunk = decoder.decode(value);
+                const match = chunk.match(/"streamTitle":"([^"]+)"/);
+                if (match && match[1]) {
+                    const nuovoTitolo = match[1].trim();
+                    if (nuovoTitolo !== "" && nuovoTitolo !== "-") {
+                        titleDisplay.innerText = nuovoTitolo;
+                    }
+                }
+                if(programDisplay) programDisplay.innerText = getCurrentProgramName();
+            }
+        } catch (e) {
+            setTimeout(updateMetadata, 5000); 
+        }
+    }
+
+    function updateGlobalOnAir() {
+        const cur = getCurrentProgramName();
+        const programDisplay = document.getElementById('program-display-player');
+        if (programDisplay) programDisplay.innerText = cur.toUpperCase();
+    }
+
+    // 3. FUNZIONI DI RENDERING (COSTRUZIONE PAGINE)
+    function showPage(pageId) {
+        const c = document.getElementById('content');
+        window.scrollTo(0,0);
+
+        if (pageId === 'home') {
+            const now = getRomeTime();
+            const h = now.getHours();
+            const d = now.getDay();
+            let progCorrente = { t: "Shuffle", d: "La musica senza regole! Niente scalette rigide, niente generi predefiniti.", i: "shuffle.png" };
+            let progProssimo = { t: "Musica 80-90", h: "20:00" };
+
+            if (h >= 21 || (h >= 0 && h < 1)) { progCorrente = { t: "Musica Soft", d: "La colonna sonora dei tuoi momenti tranquilli.", i: "musica-soft.png" }; progProssimo = { t: "Shuffle", h: "01:00" }; }
+            else if (h >= 20 && h < 21) { progCorrente = { t: "Musica 80-90", d: "La musica che non passa mai di moda!", i: "80-90.png" }; progProssimo = { t: "Musica Soft", h: "21:00" }; }
+            else if ((d === 0 || d === 6) && h >= 10 && h < 13) { progCorrente = { t: "Mattia Chialastri", d: "Energia e intrattenimento puro.", i: "mattia-chialastri.jpg" }; progProssimo = { t: "Shuffle", h: "13:00" }; }
+
+            c.innerHTML = `
+                <div class="rockol-slider" id="rockol-slider-container">Caricamento news musicali...</div>
+                <section class="section-flex">
+                    <div class="hero-text">
+                        <h1>Benvenuto/a su Radio Estasi!</h1>
+                        <p>Sintonizzati su Radio Estasi, la tua dose quotidiana di energia e musica dalla zona di Roma. News, grandi hit e i migliori programmi streaming 24/7.</p>
+                        <a href="#" onclick="showPage('radio')" class="btn">Scopri di più</a>
+                    </div>
+                    <img src="favicon.jpg" class="hero-img">
+                </section>
+                <section style="background: var(--card-bg); padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 60px; border: 1px solid rgba(255,204,0,0.2);">
+                    <h2 style="color:var(--primary)">Scarica la nostra App</h2>
+                    <p style="margin: 10px 0 20px;">Porta Radio Estasi sempre con te sul tuo smartphone Android!</p>
+                    <a href="https://www.appcreator24.com/app3189964-35h0xg" target="_blank" class="btn">SCARICA ORA</a>
+                </section>
+                <div class="onair-home-flex">
+                    <div class="now-card">
+                        <img src="${progCorrente.i}" style="width:120px; height:120px; border-radius:15px; object-fit:cover;">
+                        <div>
+                            <span class="on-air-badge">IN ONDA ORA</span>
+                            <h3 style="margin-top:10px">${progCorrente.t}</h3>
+                            <p style="font-size:0.85rem; color:#aaa;">${progCorrente.d}</p>
+                        </div>
+                    </div>
+                    <div class="next-card">
+                        <small style="color:var(--primary)">A SEGUIRE ORE ${progProssimo.h}</small>
+                        <h4 style="margin-top:5px">${progProssimo.t}</h4>
+                    </div>
+                </div>
+                <h2>Ultime News</h2>
+                <div id="h-news">${renderNews(3)}</div>
+                <h2 style="margin-top:40px">Prossimi Eventi</h2>
+                <div id="h-eventi">${renderEventi(2)}</div>
+            `;
+            fetchRockolSlider();
+        } 
+        else if (pageId === 'radio') {
+            c.innerHTML = `<h1>Chi Siamo</h1>
+            <p>Tutto ebbe inizio in una piccola stanza...</p>
+            <p>Fu allora che nacque Radio Estasi...</p>`; // (Testo accorciato per brevità, tieni il tuo originale)
+        }
+        else if (pageId === 'news') { c.innerHTML = `<h1>News</h1><div>${renderNews(20)}</div>`; }
+        else if (pageId === 'music-news') { 
+            c.innerHTML = `<h1>Music News</h1><p style="margin-bottom:20px; color:#888;">Le ultime notizie dal mondo della musica</p><div id="rss-content">Caricamento notizie in corso...</div>`;
+            fetchMusicNews();
+        }
+        else if (pageId === 'eventi') { c.innerHTML = `<h1>Eventi</h1><div>${renderEventi(20)}</div>`; }
+        else if (pageId === 'team') { 
+            c.innerHTML = `<h1>Il Team</h1>
+                <div class="prog-item"><img src="mattia-chialastri.jpg" class="prog-img-circle"><div><h3>Mattia Chialastri <small>(Editore)</small></h3><p>...</p></div></div>
+                <div class="prog-item"><img src="sofia-chialastri.jpg" class="prog-img-circle"><div><h3>Sofia Chialastri <small>(Direttore Musicale)</small></h3><p>...</p></div></div>`; 
+        }
+        else if (pageId === 'palinsesto') { renderPalinsestoLayout(); }
+        else if (pageId === 'programmi') {
+            c.innerHTML = `<h1>I nostri Programmi</h1>
+                <div class="prog-item"><img src="wake-up-radio.png" class="prog-img-circle"><div><h3>Wake up radio</h3><p>...</p></div></div>
+                <div class="prog-item"><img src="shuffle.png" class="prog-img-circle"><div><h3>Shuffle</h3><p>...</p></div></div>`;
+        }
+        else if (pageId === 'podcast') {
+            c.innerHTML = `<h1>Repliche & Podcast</h1>
+                <div id="podcast-list">
+                    ${db.podcasts.length === 0 ? '<p>Nessun podcast caricato.</p>' : db.podcasts.map(p => `
+                        <div class="prog-item" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 20px; width: 100%;">
+                                <img src="favicon.jpg" class="prog-img-circle" style="width: 60px; height: 60px;">
+                                <div><h3 style="margin: 0;">${p.t}</h3><p style="font-size: 0.85rem; color: #aaa;">${p.d}</p></div>
+                            </div>
+                            <audio controls style="width: 100%; margin-top: 10px; filter: invert(100%);"><source src="${p.src}" type="audio/mpeg"></audio>
+                        </div>
+                    `).join('')}
+                </div>`;
+        }
+        else if (pageId === 'contatti') { c.innerHTML = `<h1>Contattaci</h1><p>Email: radioestasi1@gmail.com</p><p>Tel: 3924758156</p>`; }
+        else if (pageId === 'privacy') { c.innerHTML = `<h1>Privacy Policy</h1><p>...</p>`; }
+        else if (pageId === 'admin') {
+            let p = prompt("Password:");
+            if(p === "estasi2026") renderAdminPanel();
+            else showPage('home');
+        }
+        updateGlobalOnAir();
+    }
+
     function renderNews(limit) {
-        if(!db.news || !db.news.length) return "<p>Nessuna news presente.</p>";
+        if(!db.news.length) return "<p>Nessuna news presente.</p>";
         return db.news.slice(0, limit).map(n => `<div class="admin-form"><small style="color:var(--primary)">${n.cat}</small><h4>${n.t}</h4><p>${n.d}</p></div>`).join('');
     }
 
     function renderEventi(limit) {
-        if(!db.eventi || !db.eventi.length) return "<p>Nessun evento in programma.</p>";
+        if(!db.eventi.length) return "<p>Nessun evento in programma.</p>";
         return db.eventi.slice(0, limit).map(e => `<div style="border-left:4px solid var(--primary); padding-left:15px; margin-bottom:20px;"><h4>${e.t}</h4><p>${e.d}</p><small>📍 ${e.loc} | ⏰ ${e.ora} | 🎙 Presenti: ${e.team}</small></div>`).join('');
     }
 
-    // 2. FUNZIONI ADMIN (Salvataggio dati)
-    function saveNews() {
-        const t = document.getElementById('news-t').value;
-        const d = document.getElementById('news-d').value;
-        const cat = document.getElementById('news-cat').value;
-        if(t && d) {
-            db.news.unshift({t, d, cat});
-            localStorage.setItem('est_news', JSON.stringify(db.news));
-            alert('News salvata!');
-            showPage('home');
+    function renderPalinsestoLayout() {
+        const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+        const today = days[getRomeTime().getDay()];
+        document.getElementById('content').innerHTML = `<h1>Palinsesto</h1>
+            <div style="display:flex; gap:10px; overflow-x:auto; margin-bottom:20px;">
+                ${days.map(d => `<button class="btn" style="background:${d===today?'var(--danger)':'#222'}; color:#fff" onclick="renderDaySchedule('${d}')">${d}</button>`).join('')}
+            </div><div id="schedule-list"></div>`;
+        renderDaySchedule(today);
+    }
+
+    function renderDaySchedule(dayName) {
+        const list = document.getElementById('schedule-list');
+        const hour = getRomeTime().getHours();
+        const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+        const isToday = (dayName === days[getRomeTime().getDay()]);
+        
+        let schedule = [
+            {s:0,e:1,t:"Musica Soft",i:"musica-soft.png"},
+            {s:1,e:8,t:"Shuffle",i:"shuffle.png"},
+            {s:8,e:10,t:"Musica 80-90",i:"80-90.png"}
+        ];
+        if(dayName === 'Sabato' || dayName === 'Domenica') {
+            schedule.push({s:10,e:13,t:"Mattia Chialastri",i:"mattia-chialastri.jpg"}, {s:13,e:20,t:"Shuffle",i:"shuffle.png"});
+        } else {
+            schedule.push({s:10,e:20,t:"Shuffle",i:"shuffle.png"});
         }
-    }
-
-    function saveEvento() {
-        const e = { 
-            t: document.getElementById('ev-t').value, 
-            d: document.getElementById('ev-d').value, 
-            loc: document.getElementById('ev-loc').value, 
-            ora: document.getElementById('ev-ora').value,
-            team: document.getElementById('ev-team').value 
-        };
-        if(!e.t) return alert("Inserisci titolo!");
-        db.eventi.unshift(e);
-        localStorage.setItem('est_eventi', JSON.stringify(db.eventi));
-        alert("Evento Salvato!");
-        showPage('eventi');
-    }
-
-    function savePodcast() {
-        const t = document.getElementById('pod-t').value;
-        const d = document.getElementById('pod-d').value;
-        const src = document.getElementById('pod-src').value;
-        if (!t || !src) return alert("Inserisci titolo e link!");
-        db.podcasts.unshift({ t, d, src });
-        localStorage.setItem('est_podcasts', JSON.stringify(db.podcasts));
-        alert("Podcast salvato!");
-        showPage('podcast');
+        schedule.push({s:20,e:21,t:"Musica 80-90",i:"80-90.png"}, {s:21,e:24,t:"Musica Soft",i:"musica-soft.png"});
+        
+        list.innerHTML = schedule.sort((a,b)=>a.s-b.s).map(p => `
+            <div class="prog-item ${isToday && hour>=p.s && hour<p.e ? 'active-now' : ''}">
+                <div style="width:60px; font-weight:800; color:var(--primary)">${p.s}:00</div>
+                <img src="${p.i}" class="prog-img-circle" style="width:50px; height:50px">
+                <div>${isToday && hour>=p.s && hour<p.e ? '<span class="on-air-badge">ON AIR</span>' : ''}<strong>${p.t}</strong></div>
+            </div>`).join('');
     }
 
     function renderAdminPanel() {
@@ -294,12 +426,8 @@
             <h1>Admin Panel</h1>
             <div class="admin-form">
                 <h3>Aggiungi News</h3>
-                <input type="text" id="news-t" placeholder="Titolo news">
-                <textarea id="news-d" placeholder="Testo news"></textarea>
-                <select id="news-cat">
-                    <option value="estasi news">Estasi News</option>
-                    <option value="curiosità">Curiosità</option>
-                </select>
+                <input type="text" id="news-t" placeholder="Titolo della news">
+                <textarea id="news-d" placeholder="Testo della notizia"></textarea>
                 <button class="btn" onclick="saveNews()">Salva News</button>
             </div>
             <div class="admin-form">
@@ -315,74 +443,96 @@
                 <h3>Aggiungi Podcast</h3>
                 <input type="text" id="pod-t" placeholder="Titolo podcast">
                 <textarea id="pod-d" placeholder="Descrizione"></textarea>
-                <input type="text" id="pod-src" placeholder="Link URL file audio">
+                <input type="text" id="pod-src" placeholder="Link file audio">
                 <button class="btn" onclick="savePodcast()">Salva Podcast</button>
             </div>
-            <button class="btn" style="background:red" onclick="localStorage.clear(); location.reload();">RESET DATABASE</button>
+            <button class="btn" style="background:red" onclick="localStorage.clear(); location.reload();">Reset Totale Database</button>
         `;
     }
 
-    // 3. PALINSESTO E LOGICA ORARIA
-    function renderPalinsestoLayout() {
-        const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
-        const today = days[getRomeTime().getDay()];
-        document.getElementById('content').innerHTML = `
-            <h1>Palinsesto</h1>
-            <div style="display:flex; gap:10px; overflow-x:auto; margin-bottom:20px;">
-                ${days.map(d => `<button class="btn" style="background:${d===today?'var(--danger)':'#222'}; color:#fff" onclick="renderDaySchedule('${d}')">${d}</button>`).join('')}
-            </div>
-            <div id="schedule-list"></div>`;
-        renderDaySchedule(today);
+    // 4. LOGICA DATI E CHIAMATE ESTERNE
+    async function fetchRockolSlider() {
+        const rssUrl = 'https://www.rockol.it/rss/news';
+        const container = document.getElementById('rockol-slider-container');
+        try {
+            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
+            const data = await response.json();
+            if (data.status === 'ok') {
+                container.innerHTML = data.items.slice(0, 3).map(item => {
+                    const img = item.enclosure.link || item.thumbnail || 'favicon.jpg';
+                    return `<div class="rockol-card">
+                        <img src="${img}" class="rockol-img" onerror="this.src='favicon.jpg'">
+                        <div class="rockol-body"><h4>${item.title}</h4><a href="${item.link}" target="_blank" style="color:var(--primary); font-size:0.8rem;">Leggi news</a></div>
+                    </div>`;
+                }).join('');
+            }
+        } catch (e) { container.innerHTML = ""; }
     }
 
-    function renderDaySchedule(dayName) {
-        const list = document.getElementById('schedule-list');
-        const hour = getRomeTime().getHours();
-        const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
-        const isToday = (dayName === days[getRomeTime().getDay()]);
-        
-        let schedule = [
-            {s:0,e:1,t:"Musica Soft",i:"musica-soft.png"},
-            {s:1,e:8,t:"Shuffle",i:"shuffle.png"},
-            {s:8,e:10,t:"Musica 80-90",i:"80-90.png"}
-        ];
+    async function fetchMusicNews() {
+        const rssUrl = 'https://www.rockol.it/rss/news';
+        const container = document.getElementById('rss-content');
+        try {
+            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
+            const data = await response.json();
+            if (data.status === 'ok') {
+                container.innerHTML = data.items.map(item => `
+                    <div class="admin-form">
+                        <small style="color:var(--primary)">${item.pubDate}</small>
+                        <h3 style="margin:5px 0;">${item.title}</h3>
+                        <p style="font-size:0.9rem; margin-bottom:10px;">${item.description.replace(/<[^>]*>?/gm, '').substring(0, 200)}...</p>
+                        <a href="${item.link}" target="_blank" class="btn" style="padding: 5px 15px; font-size: 0.75rem;">Leggi tutto</a>
+                    </div>
+                `).join('');
+            }
+        } catch (error) { container.innerHTML = "<p>Errore durante il caricamento.</p>"; }
+    }
 
-        if(dayName === 'Sabato' || dayName === 'Domenica') {
-            schedule.push({s:10,e:13,t:"Mattia Chialastri",i:"mattia-chialastri.jpg"});
-            schedule.push({s:13,e:20,t:"Shuffle",i:"shuffle.png"});
-        } else {
-            schedule.push({s:10,e:20,t:"Shuffle",i:"shuffle.png"});
+    function saveNews() {
+        const t = document.getElementById('news-t').value;
+        const d = document.getElementById('news-d').value;
+        if(t && d) {
+            db.news.unshift({t, d, cat: 'news'});
+            localStorage.setItem('est_news', JSON.stringify(db.news));
+            alert('News salvata!');
+            showPage('home');
         }
-        schedule.push({s:20,e:21,t:"Musica 80-90",i:"80-90.png"});
-        schedule.push({s:21,e:24,t:"Musica Soft",i:"musica-soft.png"});
-        
-        list.innerHTML = schedule.sort((a,b)=>a.s-b.s).map(p => `
-            <div class="prog-item ${isToday && hour>=p.s && hour<p.e ? 'active-now' : ''}">
-                <div style="width:60px; font-weight:800; color:var(--primary)">${p.s}:00</div>
-                <img src="${p.i}" class="prog-img-circle" style="width:50px; height:50px">
-                <div>${isToday && hour>=p.s && hour<p.e ? '<span class="on-air-badge">ON AIR</span>' : ''}<strong>${p.t}</strong></div>
-            </div>`).join('');
     }
 
-    function updateGlobalOnAir() {
-        const now = getRomeTime();
-        const h = now.getHours();
-        const d = now.getDay();
-        let cur = "Shuffle";
-        if (h >= 21 || (h >= 0 && h < 1)) cur = "Musica Soft";
-        else if (h >= 20 && h < 21) cur = "Musica 80-90";
-        else if (h >= 8 && h < 10) cur = "Musica 80-90";
-        else if ((d === 0 || d === 6) && h >= 10 && h < 13) cur = "Mattia Chialastri";
-        
-        const programDisplay = document.getElementById('program-display-player');
-        if (programDisplay) programDisplay.innerText = cur.toUpperCase();
+    function saveEvento() {
+        const e = { 
+            t: document.getElementById('ev-t').value, 
+            d: document.getElementById('ev-d').value, 
+            loc: document.getElementById('ev-loc').value, 
+            ora: document.getElementById('ev-ora').value,
+            team: document.getElementById('ev-team').value 
+        };
+        db.eventi.unshift(e);
+        localStorage.setItem('est_eventi', JSON.stringify(db.eventi));
+        alert("Evento Salvato!");
+        showPage('eventi');
     }
 
-    // 4. AVVIO FINALE (Importantissimo che sia in fondo)
+    function savePodcast() {
+        const t = document.getElementById('pod-t').value;
+        const d = document.getElementById('pod-d').value;
+        const src = document.getElementById('pod-src').value;
+        if (!t || !src) { alert("Inserisci titolo e il link del file!"); return; }
+        db.podcasts.unshift({ t, d, src });
+        localStorage.setItem('est_podcasts', JSON.stringify(db.podcasts));
+        alert("Podcast collegato correttamente!");
+        showPage('podcast');
+    }
+
+    // 5. EVENTI DI AVVIO E CONTROLLI PLAYER
+    btnPlay.onclick = () => {
+        if (audio.paused) { audio.play(); btnPlay.innerText = "⏸"; } 
+        else { audio.pause(); btnPlay.innerText = "▶"; }
+    };
+
     window.onload = () => {
         showPage('home');
         updateMetadata();
-        updateGlobalOnAir();
     };
 </script>
 </body>
