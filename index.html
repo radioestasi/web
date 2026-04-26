@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -133,14 +132,12 @@
         .admin-form { background: var(--card-bg); padding: 20px; border-radius: 15px; margin-bottom: 20px; }
         .admin-form input, .admin-form textarea, .admin-form select { width: 100%; padding: 10px; margin: 10px 0; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; }
 
-        /* Stili Slider Rockol */
         .rockol-slider { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 20px; margin-bottom: 40px; scroll-snap-type: x mandatory; }
         .rockol-card { min-width: 300px; flex: 1; background: var(--card-bg); border-radius: 15px; overflow: hidden; scroll-snap-align: start; border: 1px solid #333; }
         .rockol-img { width: 100%; height: 150px; object-fit: cover; }
         .rockol-body { padding: 15px; }
         .rockol-body h4 { font-size: 0.9rem; margin-bottom: 10px; height: 40px; overflow: hidden; }
 
-        /* Stile On Air Home */
         .onair-home-flex { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 60px; }
         .now-card { flex: 2; background: linear-gradient(145deg, #1a1a1a, #000); padding: 25px; border-radius: 20px; border: 1px solid var(--danger); display: flex; gap: 20px; }
         .next-card { flex: 1; background: var(--card-bg); padding: 20px; border-radius: 20px; opacity: 0.8; }
@@ -220,20 +217,17 @@
 </footer>
 
 <script>
-    // 1. COSTANTI DOM (ELEMENTI HTML)
     const audio = document.getElementById('audioStream');
     const btnPlay = document.getElementById('btnPlay');
     const titleDisplay = document.getElementById('current-onair-title');
     const programDisplay = document.getElementById('program-display-player');
 
-    // 2. DATABASE (INIZIALIZZAZIONE)
     const db = {
         news: JSON.parse(localStorage.getItem('est_news')) || [],
         eventi: JSON.parse(localStorage.getItem('est_eventi')) || [],
         podcasts: JSON.parse(localStorage.getItem('est_podcasts')) || []
     };
 
-    // 3. UTILITY TEMPO E ORARI
     function getRomeTime() { 
         return new Date(new Date().toLocaleString("en-US", {timeZone: "Europe/Rome"})); 
     }
@@ -262,7 +256,6 @@
         if (programDisplay) programDisplay.innerText = cur.toUpperCase();
     }
 
-    // 4. LOGICA NAVIGAZIONE PAGINE
     function showPage(pageId) {
         const c = document.getElementById('content');
         window.scrollTo(0,0);
@@ -389,7 +382,6 @@
         updateGlobalOnAir();
     }
 
-    // 5. FUNZIONI DI RENDERING
     function renderNews(limit) {
         if(!db.news.length) return "<p>Nessuna news presente.</p>";
         return db.news.slice(0, limit).map(n => `<div class="admin-form"><small style="color:var(--primary)">${n.cat}</small><h4>${n.t}</h4><p>${n.d}</p></div>`).join('');
@@ -438,7 +430,6 @@
             </div>`).join('');
     }
 
-    // 6. FUNZIONI ASINCRONE (METADATA & RSS)
     async function updateMetadata() {
         if(programDisplay) programDisplay.innerText = getCurrentProgramName();
         try {
@@ -505,7 +496,6 @@
         } catch (error) { container.innerHTML = "<p>Errore durante il caricamento.</p>"; }
     }
 
-    // 7. FUNZIONI ADMIN (SALVATAGGIO)
     function renderAdminPanel() {
         document.getElementById('content').innerHTML = `
             <h1>Admin Panel</h1>
@@ -577,7 +567,6 @@
         }
     }
 
-    // 8. CONTROLLO PLAYER E AVVIO
     btnPlay.onclick = () => {
         if (audio.paused) { 
             audio.play(); 
