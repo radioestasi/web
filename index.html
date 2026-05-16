@@ -385,11 +385,18 @@
     function renderNews(limit) {
     if(!db.news.length) return "<p>Nessuna news presente.</p>";
     return db.news.slice(0, limit).map(n => `
-        <div class="admin-form">
-            ${n.img ? `<img src="${n.img}" style="width:100%; border-radius:10px; margin-bottom:15px; display:block;">` : ''}
-            <small style="color:var(--primary)">${n.cat}</small>
-            <h4>${n.t}</h4>
-            <p>${n.d}</p>
+        <div class="admin-form" style="display: flex; gap: 20px; align-items: flex-start;">
+            ${n.img ? `
+                <div style="flex: 0 0 200px;">
+                    <img src="${n.img}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px;">
+                </div>
+            ` : ''}
+            
+            <div style="flex: 1;">
+                <small style="color:var(--primary); text-transform: uppercase; font-weight: bold;">${n.cat}</small>
+                <h4 style="margin: 5px 0 10px 0; font-size: 1.2rem;">${n.t}</h4>
+                <p style="font-size: 0.9rem; color: #ccc; line-height: 1.4;">${n.d}</p>
+            </div>
         </div>
     `).join('');
 }
