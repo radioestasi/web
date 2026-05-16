@@ -510,35 +510,65 @@
         } catch (error) { container.innerHTML = "<p>Errore durante il caricamento.</p>"; }
     }
 
-    function renderAdminPanel() {
-        document.getElementById('content').innerHTML = `
-            <h1>Admin Panel</h1>
-            <div class="admin-form">
-                <h3>Aggiungi News</h3>
-                <input type="text" id="news-t" placeholder="Titolo della news">
-                <textarea id="news-d" placeholder="Testo della notizia"></textarea>
-                <input type="text" id="news-img" placeholder="Link al file mp3">
-                <button class="btn" onclick="saveNews()">Salva News</button>
-            </div>
-            <div class="admin-form">
-                <h3>Aggiungi Evento</h3>
-                <input type="text" id="ev-t" placeholder="Nome Evento">
-                <textarea id="ev-d" placeholder="Descrizione"></textarea>
-                <input type="text" id="ev-loc" placeholder="Località">
-                <input type="text" id="ev-ora" placeholder="Orario">
-                <input type="text" id="ev-team" placeholder="Team Presente">
-                <button class="btn" onclick="saveEvento()">Salva Evento</button>
-            </div>
-            <div class="admin-form">
-                <h3>Collega Podcast/Replica</h3>
-                <input type="text" id="pod-t" placeholder="Titolo">
-                <input type="text" id="pod-d" placeholder="Data o Descrizione">
-                <input type="text" id="pod-src" placeholder="Link al file mp3">
-                <button class="btn" onclick="savePodcast()">Salva Podcast</button>
-            </div>
-            <button class="btn" style="background:red; margin-top:20px" onclick="localStorage.clear(); location.reload();">Reset Totale Database</button>
-        `;
+   function renderAdminPanel() {
+    document.getElementById('content').innerHTML = `
+        <h1>Admin Panel</h1>
+        
+        <div class="admin-form">
+            <h3>Aggiungi News</h3>
+            <input type="text" id="news-t" placeholder="Titolo della news">
+            <textarea id="news-d" placeholder="Testo della notizia"></textarea>
+            <input type="text" id="news-img" placeholder="URL Foto News">
+            <button class="btn" onclick="saveNews()">Salva News</button>
+            <hr style="margin: 15px 0; opacity: 0.2;">
+            <button class="btn" style="background:#ff4444; font-size: 0.8rem;" onclick="resetSection('news')">Svuota News</button>
+        </div>
+
+        <div class="admin-form">
+            <h3>Aggiungi Evento</h3>
+            <input type="text" id="ev-t" placeholder="Nome Evento">
+            <textarea id="ev-d" placeholder="Descrizione"></textarea>
+            <input type="text" id="ev-loc" placeholder="Località">
+            <input type="text" id="ev-ora" placeholder="Orario">
+            <input type="text" id="ev-team" placeholder="Team Presente">
+            <button class="btn" onclick="saveEvento()">Salva Evento</button>
+            <hr style="margin: 15px 0; opacity: 0.2;">
+            <button class="btn" style="background:#ff4444; font-size: 0.8rem;" onclick="resetSection('eventi')">Svuota Eventi</button>
+        </div>
+
+        <div class="admin-form">
+            <h3>Collega Podcast/Replica</h3>
+            <input type="text" id="pod-t" placeholder="Titolo">
+            <input type="text" id="pod-d" placeholder="Data o Descrizione">
+            <input type="text" id="pod-src" placeholder="Link al file mp3">
+            <button class="btn" onclick="savePodcast()">Salva Podcast</button>
+            <hr style="margin: 15px 0; opacity: 0.2;">
+            <button class="btn" style="background:#ff4444; font-size: 0.8rem;" onclick="resetSection('podcasts')">Svuota Podcast</button>
+        </div>
+
+        <button class="btn" style="background:red; margin-top:20px" onclick="if(confirm('Vuoi davvero cancellare TUTTO?')) { localStorage.clear(); location.reload(); }">Reset Totale Database</button>
+    `;
+}
+
+    function resetSection(type) {
+    const conferma = confirm(`Sei sicuro di voler cancellare tutti i dati della sezione ${type}?`);
+    
+    if (conferma) {
+        if (type === 'news') {
+            db.news = [];
+            localStorage.removeItem('est_news');
+        } else if (type === 'eventi') {
+            db.eventi = [];
+            localStorage.removeItem('est_eventi');
+        } else if (type === 'podcasts') {
+            db.podcasts = [];
+            localStorage.removeItem('est_podcasts');
+        }
+        
+        alert(`Sezione ${type} resettata con successo!`);
+        showPage('admin');
     }
+}
 
    function saveNews() {
     const t = document.getElementById('news-t').value;
