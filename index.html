@@ -383,9 +383,16 @@
     }
 
     function renderNews(limit) {
-        if(!db.news.length) return "<p>Nessuna news presente.</p>";
-        return db.news.slice(0, limit).map(n => `<div class="admin-form"><small style="color:var(--primary)">${n.cat}</small><h4>${n.t}</h4><p>${n.d}</p></div>`).join('');
-    }
+    if(!db.news.length) return "<p>Nessuna news presente.</p>";
+    return db.news.slice(0, limit).map(n => `
+        <div class="admin-form">
+            ${n.img ? `<img src="${n.img}" style="width:100%; border-radius:10px; margin-bottom:15px; display:block;">` : ''}
+            <small style="color:var(--primary)">${n.cat}</small>
+            <h4>${n.t}</h4>
+            <p>${n.d}</p>
+        </div>
+    `).join('');
+}
 
     function renderEventi(limit) {
         if(!db.eventi.length) return "<p>Nessun evento in programma.</p>";
@@ -503,6 +510,7 @@
                 <h3>Aggiungi News</h3>
                 <input type="text" id="news-t" placeholder="Titolo della news">
                 <textarea id="news-d" placeholder="Testo della notizia"></textarea>
+                <input type="text" id="news-img" placeholder="URL Immagine (es. https://...)">
                 <button class="btn" onclick="saveNews()">Salva News</button>
             </div>
             <div class="admin-form">
@@ -525,16 +533,18 @@
         `;
     }
 
-    function saveNews() {
-        const t = document.getElementById('news-t').value;
-        const d = document.getElementById('news-d').value;
-        if(t && d) {
-            db.news.unshift({t, d, cat: 'news'});
-            localStorage.setItem('est_news', JSON.stringify(db.news));
-            alert('News salvata!');
-            showPage('home');
-        }
+   function saveNews() {
+    const t = document.getElementById('news-t').value;
+    const d = document.getElementById('news-d').value;
+    const img = document.getElementById('news-img').value;
+    
+    if(t && d) {
+        db.news.unshift({t, d, cat: 'news', img}); 
+        localStorage.setItem('est_news', JSON.stringify(db.news));
+        alert('News salvata!');
+        showPage('home');
     }
+}
 
     function saveEvento() {
         const e = { 
